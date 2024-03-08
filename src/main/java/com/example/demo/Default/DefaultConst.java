@@ -3,7 +3,7 @@ package com.example.demo.Default;
 import java.util.Map;
 
 public class DefaultConst {
-    public static final Map<Integer,String> COURSE_STATE_MAP = Map.of(0,"未结课",1,"已结课",2,"未考试",3,"已考完",4,"申请补考",5,"补考");
+    public static final Map<Integer,String> COURSE_STATE_MAP = Map.of(0,"未结课",1,"已结课",2,"未考试",3,"已考完",4,"申请补考",5,"补考",6,"考试中");
     public static final String ROLE_STUDENT = "role_stu";
     public static final String ROLE_TEACHER = "role_teacher";
     public static final String ROLE_ADMIN = "role_admin";
