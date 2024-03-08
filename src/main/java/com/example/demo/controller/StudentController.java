@@ -10,11 +10,9 @@ import com.example.demo.entity.Students;
 import com.example.demo.enums.CodeEnum;
 import com.example.demo.utils.JwtUtils;
 import com.example.demo.utils.Rest;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,29 +32,9 @@ public class StudentController {
     @Autowired
     private ExaService exaService;
 
-    @GetMapping("/login/{tid}")
-    public Rest login(@PathVariable("tid") String id){
-        try {
-            System.out.println(id);
-            Students student = service.getStudentByStudentId(id);
-            String studentId = student.getStudentId();
-            String name = student.getName();
-//            Map<String,String> sMap;
-//            sMap.put(studentId,name);
-
-            String jwt = jwtUtils.createJwt(studentId, student.getRole());
-
-
-            Map<String,String> map = Map.of("tid",studentId,"name",name,"jwt",jwt);
-
-            return Rest.success(map);
-        }catch (Exception e){
-            return Rest.failure(CodeEnum.ERROR);
-        }
-    }
-
-    @GetMapping("/exam/{tid}")
-    public Rest exam(@PathVariable("tid") String id){
+    //    查看考试安排
+    @GetMapping("/exam/{sid}")
+    public Rest exam(@PathVariable("sid") String id){
         try {
             List<Sc> scByStudentId = scService.getScByStudentId(id);
 
@@ -74,6 +52,20 @@ public class StudentController {
         }
     }
 
-//    @PostMapping("/apply")
 
+//申请补考
+    @PostMapping("/apply")
+    public Rest apply(@RequestParam("sid") String sid,@RequestParam("exaId") int exaID){
+        try {
+            int i = scService.updateCourseStateByStudentIdAndexaId(4, sid, exaID);
+            if (i == 1){
+                return Rest.success();
+
+            }else {
+                return Rest.failure(CodeEnum.FAIL_APPLY);
+            }
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
 }

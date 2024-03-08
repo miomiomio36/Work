@@ -1,5 +1,6 @@
 package com.example.demo.Service.ServiceImpl;
 
+import com.example.demo.Default.DefaultConst;
 import com.example.demo.Service.ScService;
 import com.example.demo.entity.Sc;
 import com.example.demo.mapper.ScMapper;
@@ -17,4 +18,12 @@ public class ScServiceImpl implements ScService {
         List<Sc> studentInfo = scMapper.getScByStudentId(studentId);
         return studentInfo;
     }
+
+    @Override
+    public int updateCourseStateByStudentIdAndexaId(int s, String studentId , int exaId) {
+        int i = scMapper.updateCourseStateByStudentIdAndexaId(4, studentId, exaId);
+        return i;
+    }
+
+
 }

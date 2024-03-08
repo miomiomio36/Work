@@ -1,4 +1,93 @@
 package com.example.demo.controller;
 
+import com.example.demo.Service.*;
+import com.example.demo.entity.Admin;
+import com.example.demo.entity.Students;
+import com.example.demo.entity.Teacher;
+import com.example.demo.enums.CodeEnum;
+import com.example.demo.utils.JwtUtils;
+import com.example.demo.utils.Rest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+@RestController
 public class PublicUserController {
+    @Autowired
+    private StudentService service;
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private AdminService adminService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private ScService scService;
+
+    @Autowired
+    private ExaService exaService;
+
+    @GetMapping("/login/{sid}")
+    public Rest StudentLogin(@PathVariable("sid") String id){
+        try {
+
+            Students student = service.getStudentByStudentId(id);
+            String studentId = student.getStudentId();
+            String name = student.getName();
+//            Map<String,String> sMap;
+//            sMap.put(studentId,name);
+
+            String jwt = jwtUtils.createJwt(studentId, student.getRole());
+
+
+            Map<String,String> map = Map.of("sid",studentId,"name",name,"jwt",jwt);
+
+            return Rest.success(map);
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+
+    @GetMapping("/login/{tid}")
+    public Rest TeacherLogin(@PathVariable("tid") String id){
+        try {
+
+            Teacher teacher = teacherService.getTeacherByTeacherId(id);
+            String teacherId = teacher.getTeacherId();
+            String name = teacher.getName();
+
+            String jwt = jwtUtils.createJwt(teacherId, teacher.getRole());
+
+            Map<String,String> map = Map.of("tid",teacherId,"name",name,"jwt",jwt);
+
+            return Rest.success(map);
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+
+    @PostMapping("/login")
+    public Rest ManagerLogin(@RequestBody Admin admin){
+
+        try {
+            Admin adminByUsername = adminService.getAdminByUsername(admin.getUsername());
+            if (adminByUsername == null) {
+                return Rest.failure(CodeEnum.USER_INFO_ERROR);
+            }
+            String jwt = null;
+            if (adminByUsername.getPassword() == admin.getPassword()) {
+                jwt = jwtUtils.createJwt(adminByUsername.getUsername(), adminByUsername.getRole());
+            }
+            Map<String, Object> map = Map.of("jwt",jwt,"admin",adminByUsername);
+
+            return Rest.success(map);
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
 }

@@ -5,7 +5,10 @@ public enum CodeEnum {
     ERROR(400,"error"),
     TOKEN_NULL(403,"token不存在"),
     USER_INFO_ERROR(405,"用户信息错误"),
+    FAIL_APPLY(407,"请求失败"),
     ROLE_ERROR(406,"角色错误");
+
+
 
     int code;
     String msg;
