@@ -13,5 +13,8 @@ public interface StudentsMapper {
     Students getStudentByStudentId(String studentId);
     @Select("select * from test_db.students where classId=#{classId}")
     List<Students> getStudentsByClassId(int classId);
+    @Select("select studentId from test_db.students")
+    String getStudentID();
+
 
 }
