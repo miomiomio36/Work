@@ -24,6 +24,6 @@ public interface ScMapper {
     @Update("update test_db.sc set exaId=#{exaId} where courseId=#{courseId} and studentId=#{studentId}")
     int updateExaId(int courseId,String studentId);//根据课程号和学生学号添加考试id
     @Update("update test_db.sc set courseState=#{courseState} where studentId=#{studentId} and exaId=#{exaId}")
-    int updateCourseStateByStudentIdAndexaId(int courseState,String studentId,int exaId);//通过学生学号和考试id修改课程状态
+    int updateCourseStateByStudentId(int courseState,String studentId,int exaId);//通过学生学号和考试id修改课程状态
 
 }

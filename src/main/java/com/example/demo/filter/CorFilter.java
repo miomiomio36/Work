@@ -26,5 +26,6 @@ public class CorFilter implements Filter {
         String str = req.getRequestURI();
         System.out.println("req.getRequestURI(): " + str);
         System.out.println("我是CorFilter");
+        filterChain.doFilter(req,res);
     }
 }
