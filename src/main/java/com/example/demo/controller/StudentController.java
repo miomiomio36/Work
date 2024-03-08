@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/student")
 public class StudentController {
     @Autowired
     private StudentService service;
@@ -31,6 +32,11 @@ public class StudentController {
 
     @Autowired
     private ExaService exaService;
+
+    @GetMapping("/test")
+    public void test(){
+        System.out.println("访问成功");
+    }
 
     //    查看考试安排
     @GetMapping("/exam/{sid}")

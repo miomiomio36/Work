@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 @RestController
+@RequestMapping("/public")
 public class PublicUserController {
     @Autowired
     private StudentService service;
@@ -31,6 +32,11 @@ public class PublicUserController {
 
     @Autowired
     private ExaService exaService;
+
+    @GetMapping("/test")
+    public void test(){
+        System.out.println("访问成功");
+    }
 
     @GetMapping("/login/{sid}")
     public Rest StudentLogin(@PathVariable("sid") String id){
