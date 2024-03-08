@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,28 +25,39 @@ public class MyFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse res = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
+        System.out.println("我是MyFilter");
         if(jwtUtils == null){
             jwtUtils = (JwtUtils) SpringUtils.getBean("JwtUtils");
         }
         String URI = req.getRequestURI();
         System.out.println(URI);
         String[] path = URI.split("/");
+        System.out.println("path:"+ Arrays.toString(path));
         //获取请求头中的token
         String token = req.getHeader("token");
         if(token == null||token.length()==0){
+            System.out.println("token不存在");
             res.getWriter().write(CodeEnum.TOKEN_NULL.toString());
         }
         else{
             DecodedJWT jwt =  jwtUtils.resolveJwt(token);
-            String role = jwtUtils.toRole(jwt);
-            String verifyRole = ROLE_MAP.get(path[0]);
-            if(Objects.equals(verifyRole,role)){
-                filterChain.doFilter(req,res);
+            if(jwt==null){
+                System.out.println("token不合法");
+                res.getWriter().write(CodeEnum.TOKEN_ILLEGAL.toString());
             }
-            else {
-                res.getWriter().write(CodeEnum.ROLE_ERROR.toString());
+            else{
+                String role = jwtUtils.toRole(jwt);
+                System.out.println("path[1]:"+path[1]);
+                String verifyRole = ROLE_MAP.get(path[1]);
+                System.out.println("需要的角色权限:"+verifyRole);
+                System.out.println("token的角色权限:"+role);
+                if(Objects.equals(verifyRole,role)){
+                    filterChain.doFilter(req,res);
+                }
+                else {
+                    res.getWriter().write(CodeEnum.ROLE_ERROR.toString());
+                }
             }
         }
-
     }
 }

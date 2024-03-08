@@ -38,7 +38,7 @@ public class PublicUserController {
         System.out.println("访问成功");
     }
 
-    @GetMapping("/login/{sid}")
+    @GetMapping("/loginS/{sid}")
     public Rest StudentLogin(@PathVariable("sid") String id){
         try {
 
@@ -59,7 +59,7 @@ public class PublicUserController {
         }
     }
 
-    @GetMapping("/login/{tid}")
+    @GetMapping("/loginT/{tid}")
     public Rest TeacherLogin(@PathVariable("tid") String id){
         try {
 
@@ -77,7 +77,7 @@ public class PublicUserController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping("/loginA")
     public Rest ManagerLogin(@RequestBody Admin admin){
 
         try {
