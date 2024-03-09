@@ -20,8 +20,8 @@ public interface ScMapper {
 
     @Select("select * from test_db.sc where studentId=#{studentId} and courseId=#{coureseId}")
     Sc getSCByStudentIdAndCourseId(String studentId,int courseId);//通过学生学号和课程id查询Sc内所有内容
-    @Update("update test_db.sc set grade=#{grade} where studentId=#{studentId}")
-    int updateGradeByStudentId(int grade,String studentId);//根据学号修改学生成绩
+    @Update("update test_db.sc set grade=#{grade} where studentId=#{studentId} and courseId=#{courseId}")
+    int updateGradeByStudentId(int grade,String studentId,int courseId);//根据学号和科目修改学生成绩
     @Update("update test_db.sc set courseState=#{courseState} where courseId=#{courseId}")
     int updateCourseStateByCourseId(int courseState,int courseId);//根据课程号修改课程状态
     @Update("update test_db.sc set exaId=#{exaId} where courseId=#{courseId} and studentId=#{studentId}")

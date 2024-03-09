@@ -82,4 +82,19 @@ public class TeacherController {
         }
     }
 
+    @PostMapping("updateGrade")
+    public Rest UpdateGrade(@RequestParam("grade") int grade,@RequestParam("sid") String studentId,@RequestParam("courseId") int courseId){
+        try{
+            int i = scService.updateGradeByStudentId(grade, studentId, courseId);
+            if (i == 1) {
+                return Rest.success(CodeEnum.SUCCESS);
+            }else {
+                return Rest.failure(CodeEnum.FAIL_APPLY);
+            }
+
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+
 }

@@ -24,4 +24,10 @@ public class ExaServiceImpl implements ExaService {
         List<Exa> exaByTeacherId = exaService.getExaByTeacherId(teacherId);
         return exaByTeacherId;
     }
+
+    @Override
+    public int addExa(Exa exa) {
+        int i = exaService.addExa(exa);
+        return i;
+    }
 }

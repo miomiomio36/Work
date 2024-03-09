@@ -8,4 +8,5 @@ public interface ExaService {
     Exa getExaById(int id);
 
     List<Exa> getExaByTeacherId(String teacherId);
+    int addExa(Exa exa);
 }

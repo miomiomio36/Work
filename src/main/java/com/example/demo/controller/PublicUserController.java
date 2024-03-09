@@ -79,7 +79,6 @@ public class PublicUserController {
 
     @PostMapping("/loginA")
     public Rest ManagerLogin(@RequestBody Admin admin){
-
         try {
             Admin adminByUsername = adminService.getAdminByUsername(admin.getUsername());
             if (adminByUsername == null) {
