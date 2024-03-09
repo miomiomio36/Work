@@ -8,4 +8,10 @@ public interface ScService {
     List<Sc> getScByStudentId(String studentId);
 
     int updateCourseStateByStudentIdAndexaId(int courseState,String studentId,int exaId);
+
+    List<String> getStudentIdByCourseId(int courseId);
+
+    int getGradeByStudentIdAndCourseId(String studentId,int courseId);
+
+
 }

@@ -21,8 +21,21 @@ public class ScServiceImpl implements ScService {
 
     @Override
     public int updateCourseStateByStudentIdAndexaId(int s, String studentId , int exaId) {
-        int i = scMapper.updateCourseStateByStudentId(4, studentId, exaId);
+        int i = scMapper.updateCourseStateByStudentId(s, studentId, exaId);
         return i;
+    }
+
+    @Override
+    public List<String> getStudentIdByCourseId(int courseId) {
+
+        List<String> studentIdByCourseId = scMapper.getStudentIdByCourseId(courseId);
+        return studentIdByCourseId;
+    }
+
+    @Override
+    public int getGradeByStudentIdAndCourseId(String studentId, int courseId) {
+        int gradeByStudentIdAndCourseId = scMapper.getGradeByStudentIdAndCourseId(studentId, courseId);
+        return gradeByStudentIdAndCourseId;
     }
 
 

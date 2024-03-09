@@ -13,6 +13,7 @@ import com.example.demo.utils.Rest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ public class StudentController {
 
     @Autowired
     private ExaService exaService;
+
+
 
     @GetMapping("/test")
     public void test(){
@@ -64,6 +67,21 @@ public class StudentController {
     public Rest apply(@RequestParam("sid") String sid,@RequestParam("exaId") int exaID){
         try {
             int i = scService.updateCourseStateByStudentIdAndexaId(4, sid, exaID);
+            if (i == 1){
+                return Rest.success();
+
+            }else {
+                return Rest.failure(CodeEnum.FAIL_APPLY);
+            }
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+
+    @PostMapping("/attend")
+    public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId")int exaId){
+        try {
+            int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
             if (i == 1){
                 return Rest.success();
 
