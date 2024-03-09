@@ -6,6 +6,8 @@ import com.example.demo.mapper.ExaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExaServiceImpl implements ExaService {
 
@@ -15,5 +17,11 @@ public class ExaServiceImpl implements ExaService {
     public Exa getExaById(int id) {
         Exa exaById = exaService.getExaById(id);
         return exaById;
+    }
+
+    @Override
+    public List<Exa> getExaByTeacherId(String teacherId) {
+        List<Exa> exaByTeacherId = exaService.getExaByTeacherId(teacherId);
+        return exaByTeacherId;
     }
 }

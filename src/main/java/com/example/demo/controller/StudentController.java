@@ -62,7 +62,7 @@ public class StudentController {
     }
 
 
-//申请补考
+    //申请补考
     @PostMapping("/apply")
     public Rest apply(@RequestParam("sid") String sid,@RequestParam("exaId") int exaID){
         try {
@@ -78,13 +78,14 @@ public class StudentController {
         }
     }
 
+
+//    参加考试
     @PostMapping("/attend")
     public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId")int exaId){
         try {
             int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
             if (i == 1){
                 return Rest.success();
-
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }

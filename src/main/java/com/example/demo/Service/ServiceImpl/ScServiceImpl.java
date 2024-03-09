@@ -38,5 +38,11 @@ public class ScServiceImpl implements ScService {
         return gradeByStudentIdAndCourseId;
     }
 
+    @Override
+    public Sc getSCByStudentIdAndCourseId(String studentId, int courseId) {
+        Sc scByStudentIdAndCourseId = scMapper.getSCByStudentIdAndCourseId(studentId, courseId);
+        return scByStudentIdAndCourseId;
+    }
+
 
 }

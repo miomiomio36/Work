@@ -10,6 +10,7 @@ import com.example.demo.utils.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,14 +38,15 @@ public class TeacherController {
         System.out.println("访问成功");
     }
 
+//    查看监考的考试
     @PostMapping("/showExa")
     public Rest showExa(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
             if (teacherByTeacherId != null){
                 String teacherId = teacherByTeacherId.getTeacherId();
-                Exa exaById = exaService.getExaById(Integer.parseInt(teacherId));
-                return Rest.success(exaById);
+                List<Exa> exaByTeacherId = exaService.getExaByTeacherId(teacherId);
+                return Rest.success(exaByTeacherId);
             }
             else {
                 return Rest.failure(CodeEnum.USER_INFO_ERROR);
@@ -54,29 +56,27 @@ public class TeacherController {
         }
     }
 
+
+//   查看成绩
     @PostMapping("showGrade")
     public Rest ShowGrade(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
             if (teacherByTeacherId != null){
+                int classIdByTeacherId = tsService.getClassIdByTeacherId(tid);
+                List<Sc> grade = new ArrayList<>();
+                List<Students> studentsByClassId = studentService.getStudentsByClassId(classIdByTeacherId);
                 int courseId = teacherByTeacherId.getCourseId();
-                List<String> studentIdByCourseId = scService.getStudentIdByCourseId(courseId);
-                for (int i = 0; i < studentIdByCourseId.size(); i++) {
-                    String studentid = studentIdByCourseId.get(i);
-                    Students student = studentService.getStudentByStudentId(studentid);
-                    int classId = student.getClassId();
-                    int classIdByTeacherId = tsService.getClassIdByTeacherId(tid);
-                    if (classIdByTeacherId == classId){
-                        int grade = scService.getGradeByStudentIdAndCourseId(studentid, courseId);
-                        Map<String,Object> map = Map.of("sid",studentid,"courseId",courseId,"grade",grade);
-                        return Rest.success(map);
-                    }
+                for (int i = 0; i < studentsByClassId.size(); i++) {
+                    Students students = studentsByClassId.get(i);
+                    String studentId = students.getStudentId();
+                    Sc scByStudentIdAndCourseId = scService.getSCByStudentIdAndCourseId(studentId, courseId);
+                    grade.add(scByStudentIdAndCourseId);
                 }
-
+                return Rest.success(grade);
             }else {
-                return Rest.failure(CodeEnum.USER_INFO_ERROR);
+                return Rest.failure(CodeEnum.FAIL_APPLY);
             }
-            return Rest.success();
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);
         }

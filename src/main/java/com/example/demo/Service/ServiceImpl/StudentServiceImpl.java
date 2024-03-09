@@ -6,6 +6,8 @@ import com.example.demo.mapper.StudentsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
@@ -23,5 +25,11 @@ public class StudentServiceImpl implements StudentService {
     public String getStudentID() {
         String studentID = studentsMapper.getStudentID();
         return studentID;
+    }
+
+    @Override
+    public List<Students> getStudentsByClassId(int classId) {
+        List<Students> studentsByClassId = studentsMapper.getStudentsByClassId(classId);
+        return studentsByClassId;
     }
 }

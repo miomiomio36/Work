@@ -17,6 +17,9 @@ public interface ScMapper {
     List<String> getStudentIdByCourseId(int courseId);//通过课程号查询这门课的所有学生
     @Select("select grade from test_db.sc where studentId=#{studentId} and courseId=#{coureseId}")
     int getGradeByStudentIdAndCourseId(String studentId,int courseId);//通过学生学号和课程id查询成绩
+
+    @Select("select * from test_db.sc where studentId=#{studentId} and courseId=#{coureseId}")
+    Sc getSCByStudentIdAndCourseId(String studentId,int courseId);//通过学生学号和课程id查询Sc内所有内容
     @Update("update test_db.sc set grade=#{grade} where studentId=#{studentId}")
     int updateGradeByStudentId(int grade,String studentId);//根据学号修改学生成绩
     @Update("update test_db.sc set courseState=#{courseState} where courseId=#{courseId}")
