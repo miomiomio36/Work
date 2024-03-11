@@ -12,14 +12,16 @@ public class Question_dbServiceImpl implements Question_dbService {
 
     @Autowired
     private Question_dbMapper questionDbMapper;
+
+
     @Override
-    public List<question_db> getAllQuestionByid(int courseId) {
-        List<question_db> allQuestion = questionDbMapper.getAllQuestion(courseId);
+    public List<question_db> getAllQuestionBycourseId(int courseId) {
+        List<question_db> allQuestion = questionDbMapper.getAllQuestionBycourseId(courseId);
         return allQuestion;
     }
 
     @Override
-    public List<question_db> getAllQuestionByid() {
+    public List<question_db> getAllQuestion() {
         List<question_db> allQuestion = questionDbMapper.getAllQuestion();
         return allQuestion;
     }
@@ -28,5 +30,11 @@ public class Question_dbServiceImpl implements Question_dbService {
     public boolean deleteQuestion(int id) {
         boolean b = questionDbMapper.deleteQuestion(id);
         return b;
+    }
+
+    @Override
+    public int addQuestion(question_db questionDb) {
+        int i = questionDbMapper.addQuestion(questionDb);
+        return i;
     }
 }

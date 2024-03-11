@@ -41,7 +41,7 @@ public class PublicUserController {
     @GetMapping("/loginS/{sid}")
     public Rest StudentLogin(@PathVariable("sid") String id){
         try {
-
+            System.out.println("1");
             Students student = service.getStudentByStudentId(id);
             String studentId = student.getStudentId();
             String name = student.getName();

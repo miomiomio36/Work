@@ -78,6 +78,7 @@ public class TeacherController {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
         }catch (Exception e){
+            System.out.println(111);
             return Rest.failure(CodeEnum.ERROR);
         }
     }
@@ -104,7 +105,7 @@ public class TeacherController {
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
             if (teacherByTeacherId != null){
-                List<question_db> allQuestionByid = questionDbService.getAllQuestionByid();
+                List<question_db> allQuestionByid = questionDbService.getAllQuestion();
                 return Rest.success(allQuestionByid);
             }
             else {
@@ -149,5 +150,38 @@ public class TeacherController {
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);
         }
+    }
+
+//    导入题库
+    @PostMapping("/import/question")
+    public Rest ImportQuestion(@RequestBody question_db question){
+        try {
+            int i = questionDbService.addQuestion(question);
+            if (i==1){
+                return Rest.success(CodeEnum.SUCCESS);
+            }else {
+                return Rest.failure(CodeEnum.FAIL_APPLY);
+            }
+
+
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+
+//    下载对应类型题库
+    @PostMapping("/download")
+    public Rest DownloadQuestion(@RequestParam("courseId")int courseId){
+        try {
+            List<question_db> allQuestionByid = questionDbService.getAllQuestionBycourseId(courseId);
+
+            return Rest.success(allQuestionByid);
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
 }
-}
+
+
+
+

@@ -12,22 +12,22 @@ import java.util.List;
 public class ExaServiceImpl implements ExaService {
 
     @Autowired
-    private ExaService exaService;
+    private ExaMapper exaMapper;
     @Override
     public Exa getExaById(int id) {
-        Exa exaById = exaService.getExaById(id);
+        Exa exaById = exaMapper.getExaById(id);
         return exaById;
     }
 
     @Override
     public List<Exa> getExaByTeacherId(String teacherId) {
-        List<Exa> exaByTeacherId = exaService.getExaByTeacherId(teacherId);
+        List<Exa> exaByTeacherId = exaMapper.getExaByTeacherId(teacherId);
         return exaByTeacherId;
     }
 
     @Override
     public int addExa(Exa exa) {
-        int i = exaService.addExa(exa);
+        int i = exaMapper.addExa(exa);
         return i;
     }
 }

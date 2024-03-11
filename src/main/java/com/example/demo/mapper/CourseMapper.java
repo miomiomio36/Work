@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.entity.Course;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface CourseMapper {
     @Select("select * from test_db.course")
-    List<CourseMapper> getAll();
+    List<Course> getAll();
     @Select("select name from test_db.course where id=#{id}")
     String getCourseNameById(int id);
     @Select("select id from test_db.course where name=#{name}")

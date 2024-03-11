@@ -63,5 +63,11 @@ public class ScServiceImpl implements ScService {
         return i;
     }
 
+    @Override
+    public List<Sc> getAllDeferred(int courseState) {
+        List<Sc> allDeferred = scMapper.getAllDeferred(courseState);
+        return allDeferred;
+    }
+
 
 }

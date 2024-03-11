@@ -76,6 +76,8 @@ public class StudentController {
     @PostMapping("/apply")
     public Rest apply(@RequestParam("sid") String sid,@RequestParam("exaId") int exaID){
         try {
+
+            System.out.println(1);
             int i = scService.updateCourseStateByStudentIdAndexaId(4, sid, exaID);
             if (i == 1){
                 return Rest.success();
@@ -84,6 +86,7 @@ public class StudentController {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
         }catch (Exception e){
+            System.out.println(2);
             return Rest.failure(CodeEnum.ERROR);
         }
     }
@@ -103,7 +106,7 @@ public class StudentController {
                 List<question_db> questionData = null;
                 if (i == 1){
 
-                    List<question_db> allQuestion = questionDbService.getAllQuestionByid(courseIdByName);
+                    List<question_db> allQuestion = questionDbService.getAllQuestionBycourseId(courseIdByName);
                     for (int j = 0; j < 50; j++) {
 
                         Random r = new Random();
@@ -141,6 +144,22 @@ public class StudentController {
 
 
             return Rest.success(map);
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+//考试结束
+    @PostMapping("/finish")
+    public Rest FinishExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,@RequestParam("grade")int grade){
+        try {
+            Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
+            if (scByStudentIdAndExaId !=null){
+                scByStudentIdAndExaId.setGrade(grade);
+                return Rest.success(CodeEnum.SUCCESS);
+            }
+            else {
+                return Rest.failure(CodeEnum.USER_INFO_ERROR);
+            }
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);
         }

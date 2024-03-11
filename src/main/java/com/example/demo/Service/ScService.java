@@ -21,5 +21,7 @@ public interface ScService {
 
     int updateCourseStateByCourseId(int courseState,int courseId);
 
+    List<Sc> getAllDeferred(int courseState);
+
 
 }
