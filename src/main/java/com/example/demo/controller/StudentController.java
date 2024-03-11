@@ -29,9 +29,6 @@ public class StudentController {
     private CourseService courseService;
 
     @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
     private ScService scService;
     @Autowired
     private Question_dbService questionDbService;
@@ -54,8 +51,7 @@ public class StudentController {
             List<Sc> scByStudentId = scService.getScByStudentId(id);
 
             List<Exa> Exa = new ArrayList<>();
-            for (int i = 0; i < scByStudentId.size(); i++) {
-                Sc sc = scByStudentId.get(i);
+            for (Sc sc : scByStudentId) {
                 int courseState = sc.getCourseState();
                 if (courseState != 0 && courseState != 1 && courseState != 3){
                     int exaId = sc.getExaId();
@@ -94,7 +90,7 @@ public class StudentController {
 
 //    参加考试
     @PostMapping("/attend")
-    public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId")int exaId){
+    public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId){
         try {
             Exa exaById = exaService.getExaById(exaId);
             int exaState = exaById.getExaState();
@@ -103,7 +99,7 @@ public class StudentController {
 
             if (exaState ==2){
                 int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
-                List<question_db> questionData = null;
+                List<question_db> questionData = new ArrayList<>();
                 if (i == 1){
 
                     List<question_db> allQuestion = questionDbService.getAllQuestionBycourseId(courseIdByName);
@@ -117,8 +113,6 @@ public class StudentController {
                     }
                     return Rest.success(questionData);
                 }else {
-
-
                     return Rest.failure(CodeEnum.USER_INFO_ERROR);
                 }
             }else {

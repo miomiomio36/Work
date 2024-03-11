@@ -15,5 +15,6 @@ public interface CourseMapper {
     String getCourseNameById(int id);
     @Select("select id from test_db.course where name=#{name}")
     int getCourseIdByName(String name);
-
+    @Select("select count(*) from test_db.course")
+    int getCount();
 }

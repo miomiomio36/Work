@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/public")
 public class PublicUserController {
@@ -85,7 +87,7 @@ public class PublicUserController {
                 return Rest.failure(CodeEnum.USER_INFO_ERROR);
             }
             String jwt = null;
-            if (adminByUsername.getPassword() == admin.getPassword()) {
+            if (Objects.equals(adminByUsername.getPassword(), admin.getPassword())) {
                 jwt = jwtUtils.createJwt(adminByUsername.getUsername(), adminByUsername.getRole());
             }
             Map<String, Object> map = Map.of("jwt",jwt,"admin",adminByUsername);
