@@ -1,12 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.Service.ExaService;
-import com.example.demo.Service.ScService;
+import com.example.demo.Service.*;
 import com.example.demo.Service.ServiceImpl.StudentServiceImpl;
-import com.example.demo.Service.StudentService;
 import com.example.demo.entity.Exa;
 import com.example.demo.entity.Sc;
 import com.example.demo.entity.Students;
+import com.example.demo.entity.question_db;
 import com.example.demo.enums.CodeEnum;
 import com.example.demo.utils.JwtUtils;
 import com.example.demo.utils.Rest;
@@ -18,18 +17,24 @@ import org.springframework.web.service.annotation.PostExchange;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
     @Autowired
-    private StudentService service;
+    private StudentService studentService;
+
+    @Autowired
+    private CourseService courseService;
 
     @Autowired
     private JwtUtils jwtUtils;
 
     @Autowired
     private ScService scService;
+    @Autowired
+    private Question_dbService questionDbService;
 
     @Autowired
     private ExaService exaService;
@@ -45,14 +50,19 @@ public class StudentController {
     @GetMapping("/exam/{sid}")
     public Rest exam(@PathVariable("sid") String id){
         try {
+
             List<Sc> scByStudentId = scService.getScByStudentId(id);
 
             List<Exa> Exa = new ArrayList<>();
             for (int i = 0; i < scByStudentId.size(); i++) {
                 Sc sc = scByStudentId.get(i);
-                int exaId = sc.getExaId();
-                Exa exaById = exaService.getExaById(exaId);
-                Exa.add(exaById);
+                int courseState = sc.getCourseState();
+                if (courseState != 0 && courseState != 1 && courseState != 3){
+                    int exaId = sc.getExaId();
+                    Exa exaById = exaService.getExaById(exaId);
+                    Exa.add(exaById);
+                }
+
             }
             return Rest.success(Rest.success(Exa));
 
@@ -83,9 +93,31 @@ public class StudentController {
     @PostMapping("/attend")
     public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId")int exaId){
         try {
-            int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
-            if (i == 1){
-                return Rest.success();
+            Exa exaById = exaService.getExaById(exaId);
+            int exaState = exaById.getExaState();
+            String courseName = exaById.getCourseName();
+            int courseIdByName = courseService.getCourseIdByName(courseName);
+
+            if (exaState ==2){
+                int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
+                List<question_db> questionData = null;
+                if (i == 1){
+
+                    List<question_db> allQuestion = questionDbService.getAllQuestionByid(courseIdByName);
+                    for (int j = 0; j < 50; j++) {
+
+                        Random r = new Random();
+                        int i1 = r.nextInt(allQuestion.size());
+
+                        questionData.add(allQuestion.get(i1));
+                        allQuestion.remove(i1);
+                    }
+                    return Rest.success(questionData);
+                }else {
+
+
+                    return Rest.failure(CodeEnum.USER_INFO_ERROR);
+                }
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
@@ -93,4 +125,26 @@ public class StudentController {
             return Rest.failure(CodeEnum.ERROR);
         }
     }
+//查看成绩
+    @PostMapping("/grade")
+    public Rest grade(@RequestParam("sid") String sid){
+        try {
+            List<Sc> scByStudentId = scService.getScByStudentId(sid);
+            Map<String , Integer> map = null;
+            for (int i = 0; i < scByStudentId.size(); i++) {
+                Sc sc = scByStudentId.get(i);
+                int courseState = sc.getCourseState();
+                if (courseState == 3){
+                    map = Map.of("courseId", sc.getCourseId(), "grade", sc.getGrade());
+                }
+            }
+
+
+            return Rest.success(map);
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+    }
+
+
 }

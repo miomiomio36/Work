@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.Service.*;
-import com.example.demo.entity.Exa;
-import com.example.demo.entity.Sc;
-import com.example.demo.entity.Students;
-import com.example.demo.entity.Teacher;
+import com.example.demo.entity.*;
 import com.example.demo.enums.CodeEnum;
 import com.example.demo.utils.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,9 @@ public class TeacherController {
     private ScService scService;
 
     @Autowired
+    private Question_dbService questionDbService;
+
+    @Autowired
     private StudentService studentService;
 
     @GetMapping("/test")
@@ -39,7 +39,7 @@ public class TeacherController {
     }
 
 //    查看监考的考试
-    @PostMapping("/showExa")
+    @PostMapping("/find/exam")
     public Rest showExa(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
@@ -58,7 +58,7 @@ public class TeacherController {
 
 
 //   查看成绩
-    @PostMapping("showGrade")
+    @PostMapping("/find/grade")
     public Rest ShowGrade(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
@@ -82,7 +82,8 @@ public class TeacherController {
         }
     }
 
-    @PostMapping("updateGrade")
+//    上成绩
+    @PostMapping("/updateGrade")
     public Rest UpdateGrade(@RequestParam("grade") int grade,@RequestParam("sid") String studentId,@RequestParam("courseId") int courseId){
         try{
             int i = scService.updateGradeByStudentId(grade, studentId, courseId);
@@ -97,4 +98,56 @@ public class TeacherController {
         }
     }
 
+//查看题库
+@PostMapping("/find/question")
+    public Rest findQuestion_db(@RequestParam("tid") int tid){
+        try {
+            Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
+            if (teacherByTeacherId != null){
+                List<question_db> allQuestionByid = questionDbService.getAllQuestionByid();
+                return Rest.success(allQuestionByid);
+            }
+            else {
+                return Rest.failure(CodeEnum.USER_INFO_ERROR);
+            }
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+
+}
+
+
+//删题
+@PostMapping("/delet")
+    public Rest deletQuestion(@RequestParam("id") int id){
+        try {
+            boolean b = questionDbService.deleteQuestion(id);
+            if (b){
+                return Rest.success(CodeEnum.SUCCESS);
+            }else {
+                return Rest.failure(CodeEnum.FAIL_APPLY);
+            }
+
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+}
+
+
+//结课
+@PostMapping("/end")
+    public Rest endCourse(@RequestParam("tid") int tid){
+        try {
+            Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
+            int courseId = teacherByTeacherId.getCourseId();
+            int i = scService.updateCourseStateByCourseId(1, courseId);
+            if (i == 1){
+                return Rest.success(CodeEnum.SUCCESS);
+            }else {
+                return Rest.failure(CodeEnum.FAIL_APPLY);
+            }
+        }catch (Exception e){
+            return Rest.failure(CodeEnum.ERROR);
+        }
+}
 }
