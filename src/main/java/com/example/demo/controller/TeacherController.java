@@ -174,7 +174,7 @@ public class TeacherController {
         }
     }
 
-//    导入题库,未测试
+//    导入题库
     @PostMapping("/import/question")
     public Rest ImportQuestion(@RequestBody question_db question){
         System.out.println(question.toString());
