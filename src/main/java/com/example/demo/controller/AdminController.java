@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.io.Serializable;
@@ -72,10 +73,12 @@ public class AdminController {
         try {
             Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
             if (pass == 1){
-                scByStudentIdAndExaId.setCourseState(5);
+//                scByStudentIdAndExaId.setCourseState(5);
+                scService.updateCourseStateByStudentIdAndexaId(5,sid,exaId);
                 return Rest.success();
             } else if (pass == 0) {
-                scByStudentIdAndExaId.setCourseState(2);
+//                scByStudentIdAndExaId.setCourseState(2);
+                scService.updateCourseStateByStudentIdAndexaId(2,sid,exaId);
                 return Rest.success();
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
@@ -105,7 +108,7 @@ public class AdminController {
         try {
             List<Sc> allDeferred = scService.getAllDeferred(1);
             List<Course> all = courseService.getAll();
-            Map<String,Object> map = null;
+            Map<String,Integer> map = new HashMap<>();
 
 
             for (int i = 0; i < all.size(); i++) {
@@ -119,7 +122,7 @@ public class AdminController {
                     }
                 }
                 String name = courseService.getCourseNameById(id);
-                map = Map.of("name", name, "count", count);
+                map.put(name,count);
             }
 
             return Rest.success(map);

@@ -1,5 +1,7 @@
 package com.example.demo.Service;
 
+import java.util.List;
+
 public interface TsService {
-    int getClassIdByTeacherId(String teacherId);
+    List<Integer> getClassIdByTeacherId(String teacherId);
 }

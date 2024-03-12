@@ -87,27 +87,34 @@ public class StudentController {
         }
     }
 
-
 //    参加考试
     @PostMapping("/attend")
     public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId){
         try {
             Exa exaById = exaService.getExaById(exaId);
+            if (exaById ==null){
+                return Rest.failure("没有这堂考试");
+            }
             int exaState = exaById.getExaState();
             String courseName = exaById.getCourseName();
             int courseIdByName = courseService.getCourseIdByName(courseName);
-
             if (exaState ==2){
                 int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
                 List<question_db> questionData = new ArrayList<>();
                 if (i == 1){
-
                     List<question_db> allQuestion = questionDbService.getAllQuestionBycourseId(courseIdByName);
+//                    判断有没有该种类型的题
+                    if(allQuestion.isEmpty()){
+                        return Rest.failure("没有这种题目");
+                    }
+//                    抽五十道题，不够就直接给前端
                     for (int j = 0; j < 50; j++) {
-
+                        if(allQuestion.isEmpty()){
+                            break;
+//                            return Rest.failure("题目不够");
+                        }
                         Random r = new Random();
                         int i1 = r.nextInt(allQuestion.size());
-
                         questionData.add(allQuestion.get(i1));
                         allQuestion.remove(i1);
                     }
@@ -119,6 +126,7 @@ public class StudentController {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
         }catch (Exception e){
+            System.out.println(99);
             return Rest.failure(CodeEnum.ERROR);
         }
     }

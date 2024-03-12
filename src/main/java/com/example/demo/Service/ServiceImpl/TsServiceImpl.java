@@ -5,6 +5,8 @@ import com.example.demo.mapper.TsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TsServiceImpl implements TsService {
 
@@ -12,8 +14,8 @@ public class TsServiceImpl implements TsService {
     private TsMapper tsMapper;
 
     @Override
-    public int getClassIdByTeacherId(String teacherId) {
-        int classIdByTeacherId = tsMapper.getClassIdByTeacherId(teacherId);
+    public List<Integer> getClassIdByTeacherId(String teacherId) {
+        List<Integer> classIdByTeacherId = tsMapper.getClassIdByTeacherId(teacherId);
         return classIdByTeacherId;
     }
 }

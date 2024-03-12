@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import ch.qos.logback.core.joran.spi.ElementPath;
 import com.example.demo.Service.*;
 import com.example.demo.entity.*;
 import com.example.demo.enums.CodeEnum;
@@ -56,29 +57,40 @@ public class TeacherController {
         }
     }
 
-
+//要改
 //   查看成绩
     @PostMapping("/find/grade")
     public Rest ShowGrade(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
             if (teacherByTeacherId != null){
-                int classIdByTeacherId = tsService.getClassIdByTeacherId(tid);
+                List<Integer> classIdByTeacherId = tsService.getClassIdByTeacherId(tid);
                 List<Sc> grade = new ArrayList<>();
-                List<Students> studentsByClassId = studentService.getStudentsByClassId(classIdByTeacherId);
+                List<Students> studentsByClassId = null;
+                for (int i = 0; i < classIdByTeacherId.size(); i++) {
+                    Integer classId = classIdByTeacherId.get(i);
+                    List<Students> students = studentService.getStudentsByClassId(classId);
+                    if (students.isEmpty()){
+                        continue;
+                    }
+                    studentsByClassId.addAll(students);
+                }
+
                 int courseId = teacherByTeacherId.getCourseId();
+
                 for (int i = 0; i < studentsByClassId.size(); i++) {
+                    System.out.println(3);
                     Students students = studentsByClassId.get(i);
                     String studentId = students.getStudentId();
                     Sc scByStudentIdAndCourseId = scService.getSCByStudentIdAndCourseId(studentId, courseId);
                     grade.add(scByStudentIdAndCourseId);
                 }
+                System.out.println(4);
                 return Rest.success(grade);
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
         }catch (Exception e){
-            System.out.println(111);
             return Rest.failure(CodeEnum.ERROR);
         }
     }
@@ -135,24 +147,25 @@ public class TeacherController {
 }
 
 
-//结课
+//结课，有点bug
 @PostMapping("/end")
     public Rest endCourse(@RequestParam("tid") int tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
             int courseId = teacherByTeacherId.getCourseId();
             int i = scService.updateCourseStateByCourseId(1, courseId);
-            if (i == 1){
-                return Rest.success(CodeEnum.SUCCESS);
-            }else {
+            if (i == 0){
                 return Rest.failure(CodeEnum.FAIL_APPLY);
+
+            }else {
+                return Rest.success(CodeEnum.SUCCESS);
             }
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);
         }
     }
 
-//    导入题库
+//    导入题库,未测试
     @PostMapping("/import/question")
     public Rest ImportQuestion(@RequestBody question_db question){
         try {
