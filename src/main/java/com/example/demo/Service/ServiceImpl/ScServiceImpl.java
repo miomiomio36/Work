@@ -33,6 +33,11 @@ public class ScServiceImpl implements ScService {
     }
 
     @Override
+    public List<String> getStudentIdByCourseIdAndCourseState(int courseId, int courseState) {
+        return scMapper.getStudentIdByCourseIdAndCourseState(courseId,courseState);
+    }
+
+    @Override
     public int getGradeByStudentIdAndCourseId(String studentId, int courseId) {
         int gradeByStudentIdAndCourseId = scMapper.getGradeByStudentIdAndCourseId(studentId, courseId);
         return gradeByStudentIdAndCourseId;
@@ -45,9 +50,9 @@ public class ScServiceImpl implements ScService {
     }
 
     @Override
-    public Sc getScByCourseId(int courseId) {
-        Sc scByCourseId = scMapper.getScByCourseId(courseId);
-        return scByCourseId;
+    public List<Sc> getScByCourseId(int courseId) {
+        List<Sc> ScList = scMapper.getScByCourseId(courseId);
+        return ScList;
     }
 
     @Override
@@ -73,6 +78,11 @@ public class ScServiceImpl implements ScService {
     public List<Sc> getAllDeferred(int courseState) {
         List<Sc> allDeferred = scMapper.getAllDeferred(courseState);
         return allDeferred;
+    }
+
+    @Override
+    public int updateExaId(int exaId,int courseId, String studentId) {
+        return scMapper.updateExaId(exaId,courseId,studentId);
     }
 
 

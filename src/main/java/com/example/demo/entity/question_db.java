@@ -14,5 +14,5 @@ public class question_db {
    private String answer_D;
 
    private int courseId;
-   private String TrueAnswer;
+   private String trueAnswer;
 }

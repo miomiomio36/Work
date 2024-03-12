@@ -46,23 +46,30 @@ public class StudentController {
     //    查看考试安排
     @GetMapping("/exam/{sid}")
     public Rest exam(@PathVariable("sid") String id){
+        System.out.println("被访问l");
         try {
 
+            System.out.println("进入try了");
             List<Sc> scByStudentId = scService.getScByStudentId(id);
 
-            List<Exa> Exa = new ArrayList<>();
+            System.out.println(scByStudentId);
+            if(scByStudentId.isEmpty()){
+                return Rest.failure("未知错误");
+            }
+            List<Exa> exaList = new ArrayList<>();
             for (Sc sc : scByStudentId) {
                 int courseState = sc.getCourseState();
                 if (courseState != 0 && courseState != 1 && courseState != 3){
                     int exaId = sc.getExaId();
+                    System.out.println(exaId);
                     Exa exaById = exaService.getExaById(exaId);
-                    Exa.add(exaById);
+                    System.out.println(exaById);
+                    exaList.add(exaById);
                 }
-
             }
-            return Rest.success(Rest.success(Exa));
-
+            return Rest.success(exaList);
         }catch (Exception e){
+            e.printStackTrace();
             return Rest.failure(CodeEnum.ERROR);
         }
     }
@@ -72,12 +79,10 @@ public class StudentController {
     @PostMapping("/apply")
     public Rest apply(@RequestParam("sid") String sid,@RequestParam("exaId") int exaID){
         try {
-
             System.out.println(1);
             int i = scService.updateCourseStateByStudentIdAndexaId(4, sid, exaID);
             if (i == 1){
                 return Rest.success();
-
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
@@ -131,32 +136,33 @@ public class StudentController {
         }
     }
 //查看成绩
-    @PostMapping("/grade")
+    @PostMapping("/grade")//
     public Rest grade(@RequestParam("sid") String sid){
         try {
             List<Sc> scByStudentId = scService.getScByStudentId(sid);
-            Map<String , Integer> map = null;
+            List<Map<String , String>> mapList = new ArrayList<>();
             for (int i = 0; i < scByStudentId.size(); i++) {
                 Sc sc = scByStudentId.get(i);
+                String courseName = courseService.getCourseNameById(sc.getCourseId());
                 int courseState = sc.getCourseState();
                 if (courseState == 3){
-                    map = Map.of("courseId", sc.getCourseId(), "grade", sc.getGrade());
+                    Map<String,String> mapItem = Map.of("courseName",courseName,"grade",String.valueOf(sc.getGrade()));
+                    mapList.add(mapItem);
                 }
             }
-
-
-            return Rest.success(map);
+            return Rest.success(mapList);
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);
         }
     }
 //考试结束
-    @PostMapping("/finish")
+    @PostMapping("/finish")//
     public Rest FinishExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,@RequestParam("grade")int grade){
         try {
             Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
             if (scByStudentIdAndExaId !=null){
                 scByStudentIdAndExaId.setGrade(grade);
+                scService.updateGradeByStudentId(grade,scByStudentIdAndExaId.getStudentId(),scByStudentIdAndExaId.getCourseId());
                 return Rest.success(CodeEnum.SUCCESS);
             }
             else {

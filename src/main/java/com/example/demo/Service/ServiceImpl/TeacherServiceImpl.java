@@ -6,6 +6,8 @@ import com.example.demo.mapper.TeacherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TeacherServiceImpl implements TeacherService {
     @Autowired
@@ -15,5 +17,10 @@ public class TeacherServiceImpl implements TeacherService {
 
         Teacher teacherByTeacherId = teacherMapper.getTeacherByTeacherId(teacherId);
         return teacherByTeacherId;
+    }
+
+    @Override
+    public List<Teacher> getAll() {
+        return teacherMapper.getAll();
     }
 }

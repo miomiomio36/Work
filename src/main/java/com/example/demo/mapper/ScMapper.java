@@ -15,6 +15,8 @@ public interface ScMapper {
     List<Sc> getScByStudentId(String studentId);//学生通过学号获取所有的信息，获取课程状态，获取成绩等
     @Select("select studentId from test_db.sc where courseId=#{courseId}")
     List<String> getStudentIdByCourseId(int courseId);//通过课程号查询这门课的所有学生
+    @Select("select studentId from test_db.sc where courseId=#{courseId} and courseState=#{courseState}")
+    List<String> getStudentIdByCourseIdAndCourseState(int courseId,int courseState);
 
     @Select("select * from test_db.sc where courseState=#{courseState}")
     List<Sc> getAllDeferred(int courseState);//查询所有要延期考试的学生
@@ -23,7 +25,7 @@ public interface ScMapper {
     int getGradeByStudentIdAndCourseId(String studentId,int courseId);//通过学生学号和课程id查询成绩
 
     @Select("select * from test_db.sc where courseId=#{courseId}")
-    Sc getScByCourseId(int courseId);//通过课程id来查Sc
+    List<Sc> getScByCourseId(int courseId);//通过课程id来查Sc
 
     @Select("select * from test_db.sc where studentId=#{studentId} and exaId=#{exaId}")
     Sc getScByStudentIdAndExaId(String studentId,int exaId);//通过学生学号和考试id查询成绩
@@ -35,7 +37,7 @@ public interface ScMapper {
     @Update("update test_db.sc set courseState=#{courseState} where courseId=#{courseId}")
     int updateCourseStateByCourseId(int courseState,int courseId);//根据课程号修改课程状态
     @Update("update test_db.sc set exaId=#{exaId} where courseId=#{courseId} and studentId=#{studentId}")
-    int updateExaId(int courseId,String studentId);//根据课程号和学生学号添加考试id
+    int updateExaId(int exaId,int courseId,String studentId);//根据课程号和学生学号添加考试id
     @Update("update test_db.sc set courseState=#{courseState} where studentId=#{studentId} and exaId=#{exaId}")
     int updateCourseStateByStudentId(int courseState,String studentId,int exaId);//通过学生学号和考试id修改课程状态
 

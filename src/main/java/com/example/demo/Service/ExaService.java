@@ -11,4 +11,5 @@ public interface ExaService {
 
 
     int addExa(Exa exa);
+    List<Exa> getExaByTime(String exaTime);
 }

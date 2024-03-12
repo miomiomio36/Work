@@ -11,10 +11,12 @@ public interface ScService {
 
     List<String> getStudentIdByCourseId(int courseId);
 
+    List<String> getStudentIdByCourseIdAndCourseState(int courseId,int courseState);
+
     int getGradeByStudentIdAndCourseId(String studentId,int courseId);
 
     Sc getSCByStudentIdAndCourseId(String studentId,int courseId);
-    Sc getScByCourseId(int courseId);
+    List<Sc> getScByCourseId(int courseId);
 
     int updateGradeByStudentId(int grade,String studentId,int courseId);
 
@@ -23,6 +25,6 @@ public interface ScService {
     int updateCourseStateByCourseId(int courseState,int courseId);
 
     List<Sc> getAllDeferred(int courseState);
-
+    int updateExaId(int exaId,int courseId,String studentId);//根据课程号和学生学号添加考试id
 
 }

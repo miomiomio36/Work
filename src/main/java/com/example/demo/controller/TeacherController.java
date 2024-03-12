@@ -115,8 +115,8 @@ public class TeacherController {
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
             if (teacherByTeacherId != null){
-                List<question_db> allQuestionByid = questionDbService.getAllQuestion();
-                return Rest.success(allQuestionByid);
+                List<question_db> allQuestionById = questionDbService.getAllQuestionBycourseId(teacherByTeacherId.getCourseId());
+                return Rest.success(allQuestionById);
             }
             else {
                 return Rest.failure(CodeEnum.USER_INFO_ERROR);
@@ -147,12 +147,17 @@ public class TeacherController {
 
 //结课
 @PostMapping("/end")
-    public Rest endCourse(@RequestParam("tid") int tid){
+    public Rest endCourse(@RequestParam("tid") String tid){
         try {
-            Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
+            Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
             int courseId = teacherByTeacherId.getCourseId();
-            Sc scByCourseId = scService.getScByCourseId(courseId);
-            if (scByCourseId.getCourseState() ==0){
+            System.out.println(teacherByTeacherId);
+            List<Sc> scList= scService.getScByCourseId(courseId);
+            int courseState = 0;
+            for(Sc sc: scList){
+                courseState+=sc.getCourseState();
+            }
+            if (courseState ==0){
                 int i = scService.updateCourseStateByCourseId(1, courseId);
                 if (i == 0){
                     return Rest.failure(CodeEnum.FAIL_APPLY);
@@ -164,6 +169,7 @@ public class TeacherController {
                 return Rest.failure("不需要结课");
             }
         }catch (Exception e){
+            e.printStackTrace();
             return Rest.failure(CodeEnum.ERROR);
         }
     }
@@ -171,6 +177,7 @@ public class TeacherController {
 //    导入题库,未测试
     @PostMapping("/import/question")
     public Rest ImportQuestion(@RequestBody question_db question){
+        System.out.println(question.toString());
         try {
             int i = questionDbService.addQuestion(question);
             if (i==1){
@@ -178,9 +185,8 @@ public class TeacherController {
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
-
-
         }catch (Exception e){
+            e.printStackTrace();
             return Rest.failure(CodeEnum.ERROR);
         }
     }

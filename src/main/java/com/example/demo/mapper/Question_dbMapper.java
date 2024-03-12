@@ -17,8 +17,8 @@ public interface Question_dbMapper {
     @Delete("delete from test_db.question_db where id =#{id} ")
     boolean deleteQuestion(int id);
 
-    @Insert("insert into test_db.question_db(question,answer_A,answer_B,answer_C,answer_D,courseId,TrueAnswer) "+
-            "values(#{question},#{answer_A},#{answer_B}，#{answer_C}，#{answer_D}，#{courseId}，#{TrueAnswer})")
+    @Insert("insert into test_db.question_db(question,answer_A,answer_B,answer_C,answer_D,courseId,trueAnswer) "+
+            "values(#{question},#{answer_A},#{answer_B},#{answer_C},#{answer_D},#{courseId},#{trueAnswer})")
     @Options(useGeneratedKeys = true)
     int addQuestion(question_db questionDb);
 }

@@ -30,4 +30,9 @@ public class ExaServiceImpl implements ExaService {
         int i = exaMapper.addExa(exa);
         return i;
     }
+
+    @Override
+    public List<Exa> getExaByTime(String exaTime) {
+        return exaMapper.getExaByTime(exaTime);
+    }
 }
