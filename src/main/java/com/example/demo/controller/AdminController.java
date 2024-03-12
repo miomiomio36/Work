@@ -69,7 +69,7 @@ public class AdminController {
 
 //审核缓考
     @PostMapping("/auth/exam")
-    public Rest authExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,int pass){
+    public Rest authExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,@RequestParam("pass") int pass){
         try {
             Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
             if (pass == 1){

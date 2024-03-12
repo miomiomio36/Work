@@ -126,7 +126,6 @@ public class StudentController {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
         }catch (Exception e){
-            System.out.println(99);
             return Rest.failure(CodeEnum.ERROR);
         }
     }
