@@ -17,10 +17,13 @@ public interface ScMapper {
     List<String> getStudentIdByCourseId(int courseId);//通过课程号查询这门课的所有学生
 
     @Select("select * from test_db.sc where courseState=#{courseState}")
-    List<Sc> getAllDeferred(int courseState);
+    List<Sc> getAllDeferred(int courseState);//查询所有要延期考试的学生
 
     @Select("select grade from test_db.sc where studentId=#{studentId} and courseId=#{coureseId}")
     int getGradeByStudentIdAndCourseId(String studentId,int courseId);//通过学生学号和课程id查询成绩
+
+    @Select("select * from test_db.sc where courseId=#{courseId}")
+    Sc getScByCourseId(int courseId);//通过课程id来查Sc
 
     @Select("select * from test_db.sc where studentId=#{studentId} and exaId=#{exaId}")
     Sc getScByStudentIdAndExaId(String studentId,int exaId);//通过学生学号和考试id查询成绩

@@ -145,18 +145,23 @@ public class TeacherController {
 }
 
 
-//结课，有点bug
+//结课
 @PostMapping("/end")
     public Rest endCourse(@RequestParam("tid") int tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
             int courseId = teacherByTeacherId.getCourseId();
-            int i = scService.updateCourseStateByCourseId(1, courseId);
-            if (i == 0){
-                return Rest.failure(CodeEnum.FAIL_APPLY);
+            Sc scByCourseId = scService.getScByCourseId(courseId);
+            if (scByCourseId.getCourseState() ==0){
+                int i = scService.updateCourseStateByCourseId(1, courseId);
+                if (i == 0){
+                    return Rest.failure(CodeEnum.FAIL_APPLY);
 
+                }else {
+                    return Rest.success(CodeEnum.SUCCESS);
+                }
             }else {
-                return Rest.success(CodeEnum.SUCCESS);
+                return Rest.failure("不需要结课");
             }
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);

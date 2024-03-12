@@ -14,6 +14,7 @@ public interface ScService {
     int getGradeByStudentIdAndCourseId(String studentId,int courseId);
 
     Sc getSCByStudentIdAndCourseId(String studentId,int courseId);
+    Sc getScByCourseId(int courseId);
 
     int updateGradeByStudentId(int grade,String studentId,int courseId);
 
