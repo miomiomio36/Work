@@ -8,9 +8,7 @@ import com.example.demo.utils.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/teacher")
@@ -57,36 +55,36 @@ public class TeacherController {
         }
     }
 
-//要改
 //   查看成绩
     @PostMapping("/find/grade")
     public Rest ShowGrade(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
             if (teacherByTeacherId != null){
+
                 List<Integer> classIdByTeacherId = tsService.getClassIdByTeacherId(tid);
-                List<Sc> grade = new ArrayList<>();
-                List<Students> studentsByClassId = null;
+
+                List<String> str = new ArrayList<>();
+
+                List<Students> studentsByClassId = new ArrayList<>();
                 for (int i = 0; i < classIdByTeacherId.size(); i++) {
                     Integer classId = classIdByTeacherId.get(i);
                     List<Students> students = studentService.getStudentsByClassId(classId);
-                    if (students.isEmpty()){
-                        continue;
+                    if (students != null && !students.isEmpty()) { // 检查是否为空
+                        studentsByClassId.addAll(students);
                     }
-                    studentsByClassId.addAll(students);
                 }
-
                 int courseId = teacherByTeacherId.getCourseId();
-
-                for (int i = 0; i < studentsByClassId.size(); i++) {
-                    System.out.println(3);
-                    Students students = studentsByClassId.get(i);
+                for (Students students : studentsByClassId) {
                     String studentId = students.getStudentId();
+                    int classId = students.getClassId();
+                    String name = students.getName();
                     Sc scByStudentIdAndCourseId = scService.getSCByStudentIdAndCourseId(studentId, courseId);
-                    grade.add(scByStudentIdAndCourseId);
+                    int grade = scByStudentIdAndCourseId.getGrade();
+                    String s = classId+"_"+name+"_"+studentId+"_"+grade;
+                    str.add(s);
                 }
-                System.out.println(4);
-                return Rest.success(grade);
+                return Rest.success(str);
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
