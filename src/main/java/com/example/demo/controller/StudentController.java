@@ -76,7 +76,7 @@ public class StudentController {
 
 
     //申请补考
-    @PostMapping("/apply")
+    @GetMapping("/apply")
     public Rest apply(@RequestParam("sid") String sid,@RequestParam("exaId") int exaID){
         try {
             System.out.println(1);
@@ -93,7 +93,7 @@ public class StudentController {
     }
 
 //    参加考试
-    @PostMapping("/attend")
+    @GetMapping("/attend")
     public Rest attend(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId){
         try {
             Exa exaById = exaService.getExaById(exaId);
@@ -135,7 +135,7 @@ public class StudentController {
         }
     }
 //查看成绩
-    @PostMapping("/grade")//
+    @GetMapping("/grade")//
     public Rest grade(@RequestParam("sid") String sid){
         System.out.println(sid);
         try {
@@ -155,7 +155,7 @@ public class StudentController {
         }
     }
 //考试结束
-    @PostMapping("/finish")//
+    @GetMapping("/finish")//
     public Rest FinishExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,@RequestParam("grade")int grade){
         try {
             Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);

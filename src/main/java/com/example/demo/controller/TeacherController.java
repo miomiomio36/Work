@@ -38,7 +38,7 @@ public class TeacherController {
     }
 
 //    查看监考的考试
-    @PostMapping("/find/exam")
+    @GetMapping("/find/exam")
     public Rest showExa(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
@@ -56,7 +56,7 @@ public class TeacherController {
     }
 
 //   查看成绩
-    @PostMapping("/find/grade")
+    @GetMapping("/find/grade")
     public Rest ShowGrade(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
@@ -94,7 +94,7 @@ public class TeacherController {
     }
 
 //    上成绩
-    @PostMapping("/updateGrade")
+    @GetMapping("/updateGrade")
     public Rest UpdateGrade(@RequestParam("grade") int grade,@RequestParam("sid") String studentId,@RequestParam("courseId") int courseId){
         try{
             int i = scService.updateGradeByStudentId(grade, studentId, courseId);
@@ -110,7 +110,7 @@ public class TeacherController {
     }
 
 //查看题库
-@PostMapping("/find/question")
+@GetMapping("/find/question")
     public Rest findQuestion_db(@RequestParam("tid") int tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
@@ -129,7 +129,7 @@ public class TeacherController {
 
 
 //删题
-@PostMapping("/delet")
+@GetMapping("/delet")
     public Rest deletQuestion(@RequestParam("id") int id){
         try {
             boolean b = questionDbService.deleteQuestion(id);
@@ -146,7 +146,7 @@ public class TeacherController {
 
 
 //结课
-@PostMapping("/end")
+@GetMapping("/end")
     public Rest endCourse(@RequestParam("tid") String tid){
         try {
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(tid);
@@ -192,7 +192,7 @@ public class TeacherController {
     }
 
 //    下载对应类型题库
-    @PostMapping("/download")
+    @GetMapping("/download")
     public Rest DownloadQuestion(@RequestParam("courseId")int courseId){
         try {
             List<question_db> allQuestionByid = questionDbService.getAllQuestionBycourseId(courseId);

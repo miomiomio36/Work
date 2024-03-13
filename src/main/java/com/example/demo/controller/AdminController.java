@@ -41,7 +41,7 @@ public class AdminController {
 
 
 //分配考试
-    @PostMapping("/add/exam")
+    @GetMapping("/add/exam")
     public Rest addExa(@RequestParam Integer courseId,@RequestParam String exaTime,@RequestParam String type){
         int courseState = 0;
         if(type!=null){
@@ -168,7 +168,7 @@ public class AdminController {
     }
 
 //审核缓考
-    @PostMapping("/auth/exam")
+    @GetMapping("/auth/exam")
     public Rest authExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,@RequestParam("pass") int pass){
         try {
             Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
