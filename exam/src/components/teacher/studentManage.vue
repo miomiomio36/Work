@@ -115,7 +115,7 @@ export default {
       console.log("跑一跑")
       console.log("token:");
       console.log(token);
-      this.$http.ajaxGet(`http://localhost:8888/teacher/find/grade?tid=${Id}}`, token).then(res => {
+      this.$http.ajaxGet(`http://localhost:8888/teacher/find/grade?tid=${Id}`, token).then(res => {
         let response = JSON.parse(res);
         console.log(response);
       });
