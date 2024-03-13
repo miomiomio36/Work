@@ -81,7 +81,9 @@ public class TeacherController {
                     String name = students.getName();
                     Sc scByStudentIdAndCourseId = scService.getSCByStudentIdAndCourseId(studentId, courseId);
                     int grade = scByStudentIdAndCourseId.getGrade();
+                    ？？？？？？？？？？？？为什么是字符串
                     String s = classId+"_"+name+"_"+studentId+"_"+grade;
+                    ？？？？？？？？？？？？
                     str.add(s);
                 }
                 return Rest.success(str);
