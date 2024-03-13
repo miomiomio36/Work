@@ -148,6 +148,9 @@ public class StudentController {
                     Map<String, String> mapItem = Map.of("courseName", courseName, "grade", String.valueOf(sc.getGrade()));
                     mapList.add(mapItem);
                 }
+                else{
+                    return Rest.success("当前不能查询");
+                }
             }
             return Rest.success(mapList);
         }catch (Exception e){
