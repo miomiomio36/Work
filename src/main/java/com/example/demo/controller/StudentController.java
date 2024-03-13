@@ -143,14 +143,16 @@ public class StudentController {
             List<Map<String , String>> mapList = new ArrayList<>();
             for (Sc sc : scByStudentId) {
                 String courseName = courseService.getCourseNameById(sc.getCourseId());
+                System.out.println(sc);
                 int courseState = sc.getCourseState();
+                System.out.println(courseState);
                 if (courseState == 3) {
                     Map<String, String> mapItem = Map.of("courseName", courseName, "grade", String.valueOf(sc.getGrade()));
                     mapList.add(mapItem);
                 }
-                else{
-                    return Rest.success("当前不能查询");
-                }
+//                else{
+//                    return Rest.success("当前不能查询");
+//                }
             }
             return Rest.success(mapList);
         }catch (Exception e){

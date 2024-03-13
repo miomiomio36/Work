@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.json.Token;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -23,9 +24,14 @@ public class MyFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletResponse res = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         System.out.println("我是MyFilter");
+        String header2 = req.getHeader("User-Agent");
+        if (header2 == null || header2 == "") {
+            System.out.println("请求头没来");
+        }
         if(jwtUtils == null){
             jwtUtils = (JwtUtils) SpringUtils.getBean("JwtUtils");
         }
@@ -35,6 +41,8 @@ public class MyFilter implements Filter {
         System.out.println("path:"+ Arrays.toString(path));
         //获取请求头中的token
         String token = req.getHeader("token");
+        System.out.println(req);
+        System.out.println("传进来的Token:"+token);
         if(token == null||token.length()==0){
             System.out.println("token不存在");
             res.getWriter().write(CodeEnum.TOKEN_NULL.toString());

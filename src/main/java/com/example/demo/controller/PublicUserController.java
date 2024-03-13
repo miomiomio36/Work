@@ -82,6 +82,7 @@ public class PublicUserController {
     @PostMapping("/loginA")
     public Rest ManagerLogin(@RequestBody Admin admin){
         try {
+            System.out.println(admin);
             Admin adminByUsername = adminService.getAdminByUsername(admin.getUsername());
             if (adminByUsername == null) {
                 return Rest.failure(CodeEnum.USER_INFO_ERROR);

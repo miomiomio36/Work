@@ -18,7 +18,7 @@ public class CorFilter implements Filter {
         System.out.println("req.getRequestURL(): " + req.getRequestURL());
 
         req.setCharacterEncoding("UTF-8");
-        res.setHeader("Access-Control-Allow-Origin",req.getHeader("Origin"));
+        res.setHeader("Access-Control-Allow-Origin","*");
         res.setHeader("Access-Control-Allow-Methods","GET, POST, PATCH, DELETE");
         res.addHeader("Access-Control-Allow-Headers","token,Content-type");
         res.setContentType("application/json;charset=utf-8");
