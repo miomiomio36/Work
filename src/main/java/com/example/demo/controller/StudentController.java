@@ -103,7 +103,7 @@ public class StudentController {
             int exaState = exaById.getExaState();
             String courseName = exaById.getCourseName();
             int courseIdByName = courseService.getCourseIdByName(courseName);
-            if (exaState ==2){
+            if (exaState ==2||exaState==1){
                 int i = scService.updateCourseStateByStudentIdAndexaId(6, sid, exaId);
                 List<question_db> questionData = new ArrayList<>();
                 if (i == 1){
@@ -137,15 +137,15 @@ public class StudentController {
 //查看成绩
     @PostMapping("/grade")//
     public Rest grade(@RequestParam("sid") String sid){
+        System.out.println(sid);
         try {
             List<Sc> scByStudentId = scService.getScByStudentId(sid);
             List<Map<String , String>> mapList = new ArrayList<>();
-            for (int i = 0; i < scByStudentId.size(); i++) {
-                Sc sc = scByStudentId.get(i);
+            for (Sc sc : scByStudentId) {
                 String courseName = courseService.getCourseNameById(sc.getCourseId());
                 int courseState = sc.getCourseState();
-                if (courseState == 3){
-                    Map<String,String> mapItem = Map.of("courseName",courseName,"grade",String.valueOf(sc.getGrade()));
+                if (courseState == 3) {
+                    Map<String, String> mapItem = Map.of("courseName", courseName, "grade", String.valueOf(sc.getGrade()));
                     mapList.add(mapItem);
                 }
             }
@@ -161,6 +161,7 @@ public class StudentController {
             Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
             if (scByStudentIdAndExaId !=null){
                 scByStudentIdAndExaId.setGrade(grade);
+                scService.updateCourseStateByStudentIdAndexaId(3,sid,exaId);
                 scService.updateGradeByStudentId(grade,scByStudentIdAndExaId.getStudentId(),scByStudentIdAndExaId.getCourseId());
                 return Rest.success(CodeEnum.SUCCESS);
             }

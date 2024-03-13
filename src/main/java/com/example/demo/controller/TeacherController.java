@@ -196,7 +196,6 @@ public class TeacherController {
     public Rest DownloadQuestion(@RequestParam("courseId")int courseId){
         try {
             List<question_db> allQuestionByid = questionDbService.getAllQuestionBycourseId(courseId);
-
             return Rest.success(allQuestionByid);
         }catch (Exception e){
             return Rest.failure(CodeEnum.ERROR);
