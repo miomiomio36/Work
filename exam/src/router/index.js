@@ -41,7 +41,7 @@ const routes = [
       //学生管理
       {
         path: '/studentManage',
-        component: () => import('../components/teacher/studentManage.vue'),
+        component: () => import('../components/teacher/LookStudent.vue'),
       },
       //查看所有学生成绩
       {
