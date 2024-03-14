@@ -13,7 +13,7 @@ export default createStore({
         SubClass: [
           {
             id: "1-1",
-            title: '添加考试',
+            title: '查看考试',
             router: '/addExam',
           },
           {
