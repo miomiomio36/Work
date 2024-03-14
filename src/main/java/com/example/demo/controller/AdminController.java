@@ -42,7 +42,7 @@ public class AdminController {
 
 //分配考试
     @GetMapping("/add/exam")
-    public Rest addExa(@RequestParam Integer courseId,@RequestParam String exaTime,@RequestParam String type){
+    public Rest addExa(@RequestParam("courseId") Integer courseId,@RequestParam("exaTime") String exaTime,@RequestParam("type") String type){
         int courseState = 0;
         if(type!=null){
             if(type.equals("补考")){
