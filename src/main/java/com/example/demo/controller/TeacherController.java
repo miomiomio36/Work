@@ -8,6 +8,7 @@ import com.example.demo.utils.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 @RestController
@@ -64,7 +65,7 @@ public class TeacherController {
 
                 List<Integer> classIdByTeacherId = tsService.getClassIdByTeacherId(tid);
 
-                List<String> str = new ArrayList<>();
+                List<Map<String,String>> mapList = new ArrayList<>();
 
                 List<Students> studentsByClassId = new ArrayList<>();
                 for (int i = 0; i < classIdByTeacherId.size(); i++) {
@@ -77,16 +78,14 @@ public class TeacherController {
                 int courseId = teacherByTeacherId.getCourseId();
                 for (Students students : studentsByClassId) {
                     String studentId = students.getStudentId();
-                    int classId = students.getClassId();
+                    String classId = students.getClassId()+"";
                     String name = students.getName();
                     Sc scByStudentIdAndCourseId = scService.getSCByStudentIdAndCourseId(studentId, courseId);
-                    int grade = scByStudentIdAndCourseId.getGrade();
-                    ？？？？？？？？？？？？为什么是字符串
-                    String s = classId+"_"+name+"_"+studentId+"_"+grade;
-                    ？？？？？？？？？？？？
-                    str.add(s);
+                    String grade = scByStudentIdAndCourseId.getGrade()+"";
+                    Map<String,String> mapitem = Map.of("classId", classId, "name", name, "studentId", studentId, "grade", grade);
+                    mapList.add(mapitem);
                 }
-                return Rest.success(str);
+                return Rest.success(mapList);
             }else {
                 return Rest.failure(CodeEnum.FAIL_APPLY);
             }
