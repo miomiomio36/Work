@@ -42,7 +42,8 @@ public class AdminController {
 
 //分配考试
     @GetMapping("/add/exam")
-    public Rest addExa(@RequestParam Integer courseId,@RequestParam String exaTime,@RequestParam String type){
+    public Rest addExa(@RequestParam("courseId") Integer courseId,@RequestParam("exaTime") String exaTime,@RequestParam("type") String type){
+        System.out.println("有参数了："+"courseId: "+courseId+" ,exaTime: "+exaTime+" ,type: "+type);
         int courseState = 0;
         if(type!=null){
             if(type.equals("补考")){
@@ -170,8 +171,9 @@ public class AdminController {
 //审核缓考
     @GetMapping("/auth/exam")
     public Rest authExam(@RequestParam("sid") String sid,@RequestParam("exaId") int exaId,@RequestParam("pass") int pass){
+        System.out.println("有参数了："+"sid: "+sid+" ,exaId: "+exaId+" ,pass: "+pass);
         try {
-            Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
+//            Sc scByStudentIdAndExaId = scService.getScByStudentIdAndExaId(sid, exaId);
             if (pass == 1){
 //                scByStudentIdAndExaId.setCourseState(5);
                 scService.updateCourseStateByStudentIdAndexaId(5,sid,exaId);

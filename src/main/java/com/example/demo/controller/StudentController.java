@@ -64,7 +64,9 @@ public class StudentController {
                     System.out.println(exaId);
                     Exa exaById = exaService.getExaById(exaId);
                     System.out.println(exaById);
-                    exaList.add(exaById);
+                    if(exaById!=null){
+                        exaList.add(exaById);
+                    }
                 }
             }
             return Rest.success(exaList);
@@ -121,7 +123,9 @@ public class StudentController {
                         Random r = new Random();
                         int i1 = r.nextInt(allQuestion.size());
                         questionData.add(allQuestion.get(i1));
-                        allQuestion.remove(i1);
+
+                        // 去重
+//                        allQuestion.remove(i1);
                     }
                     return Rest.success(questionData);
                 }else {
@@ -147,7 +151,7 @@ public class StudentController {
                 int courseState = sc.getCourseState();
                 System.out.println(courseState);
                 if (courseState == 3) {
-                    Map<String, String> mapItem = Map.of("courseName", courseName, "grade", String.valueOf(sc.getGrade()));
+                    Map<String, String> mapItem = Map.of("courseName", courseName, "grade", String.valueOf(sc.getGrade()),"exaId",String.valueOf(sc.getExaId()));
                     mapList.add(mapItem);
                 }
 //                else{

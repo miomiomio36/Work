@@ -2,10 +2,11 @@
 <template>
   <div class="all">
     <el-table :data="pagination.records" :default-sort="{ prop: 'grade', order: 'descending' }" border>
+      <!--*******************************data数据****************************** -->
       <el-table-column fixed="left" prop="studentId" label="学号" width="180"></el-table-column>
       <el-table-column prop="studentName" label="姓名" width="100"></el-table-column>
       <el-table-column prop="clazz" label="班级" width="100"></el-table-column>
-      <!-- <el-table-column prop="gender" label="性别" width="100"></el-table-column> -->
+      
       <el-table-column prop="gender" label="性别" width="100">
         <template v-slot="scope">
           {{ scope.row.gender | formatGender }}
@@ -14,17 +15,23 @@
 
       <el-table-column prop="age" label="年龄" width="100"></el-table-column>
       <el-table-column prop="identityId" label="身份证号" width="240"></el-table-column>
+      <!--*******************************data数据****************************** -->
+
+      <!--*******************************操作****************************** -->
       <el-table-column label="操作" width="150">
         <template v-slot="scope">
           <el-button @click="checkGrade(scope.row.studentId)" type="primary" size="small">编辑</el-button>
           <el-button @click="deleteById(scope.row.studentId)" type="danger" size="small">删除</el-button>
         </template>
       </el-table-column>
+      <!--*******************************操作****************************** -->
     </el-table>
+
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
       v-model:currentPage="pagination.current" :page-sizes="[10, 20, 40, 80]" v-model:page-size="pagination.size"
       layout="total, sizes, prev, pager, next, jumper" :total="pagination.total" class="page">
     </el-pagination>
+    
     <!-- 编辑对话框-->
     <el-dialog title="编辑学生信息" v-model="dialogVisible" width="30%">
       <section class="update">
@@ -87,8 +94,9 @@ export default {
       ]
     }
   },
-   created() {
-    this.user = GetUserData()
+  created() {
+    // this.pagination.records = this.students;
+    // this.user = GetUserData()
     this.getStudentInfo()
   },
   //过滤器
@@ -100,6 +108,7 @@ export default {
   methods: {
     // 获取学生信息
     getStudentInfo() {
+      this.pagination.records = this.students;
       // this.pagination.records = this.students; // 修改为使用示例学生数据
       // 模拟从后端获取数据
       // 这里应该根据后端 API 的实际情况进行修改
@@ -110,15 +119,15 @@ export default {
 
 
       const token = localStorage.getItem('token');
-      const Id = this.user.tid;
-      console.log("ID数据:",Id)
+      // const Id = this.user.tid;
+      // console.log("ID数据:",Id)
       console.log("跑一跑")
       console.log("token:");
       console.log(token);
-      this.$http.ajaxGet(`http://localhost:8888/teacher/find/grade?tid=${Id}`, token).then(res => {
-        let response = JSON.parse(res);
-        console.log(response);
-      });
+      // this.$http.ajaxGet(`http://localhost:8888/teacher/find/grade?tid=${Id}`, token).then(res => {
+      //   let response = JSON.parse(res);
+      //   console.log(response);
+      // });
       // this.$axios.get('api/students/' + this.pagination.current + '/' + this.pagination.size)
       //     .then( res => {
       //       this.pagination = res.data.data

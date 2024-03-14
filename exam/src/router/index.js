@@ -18,6 +18,51 @@ const routes = [
     name: 'index',
     component: () => import('@/views/ViewIndex.vue'),
     children: [
+      //管理员：
+      //安排考试
+      {
+        path: '/adminAuExam',
+        component: () => import('../components/admin/adminAuExam.vue'),
+      },
+      //缓考模块
+      {
+        path: '/adminHuExam',
+        component: () => import('../components/admin/adminHuExam.vue'),
+      },
+      //缺考模块
+      {
+        path: '/adminLoExam',
+        component: () => import('../components/admin/adminLoExam.vue'),
+      },
+
+      // 教师：
+      // 教师考试模块
+      {
+        path: '/teacherExam',
+        component: () => import('../components/teacher/teacherExam.vue'),
+      },
+      // 教师成绩模块
+      {
+        path: '/teacherGrade',
+        component: () => import('../components/teacher/teacherGrade.vue'),
+      },
+      // 教师题库模块
+      {
+        path: '/teacherTiku',
+        component: () => import('../components/teacher/teacherTiku.vue'),
+      },
+      // 学生
+      // 学生考试模块：
+      {
+        path: '/studentExam',
+        component: () => import('../components/student/studentExam.vue'),
+      },
+
+      // 学生成绩模块：
+      {
+        path: '/studentGrade',
+        component: () => import('../components/student/studentGrade.vue'),
+      },
       //添加学生
       {
         path: '/addStudent',
@@ -41,7 +86,7 @@ const routes = [
       //学生管理
       {
         path: '/studentManage',
-        component: () => import('../components/teacher/LookStudent.vue'),
+        component: () => import('../components/teacher/studentManage.vue'),
       },
       //查看所有学生成绩
       {
@@ -59,6 +104,11 @@ const routes = [
         component: () => import('../components/student/scoreTable.vue')
       },
     ],
+  },
+  //答题界面：
+  {
+    path: '/Exam',
+    component: () => import('@/views/ExamView.vue'),
   },
 
 ]

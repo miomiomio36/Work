@@ -114,12 +114,16 @@ public class TeacherController {
 @GetMapping("/find/question")
     public Rest findQuestion_db(@RequestParam("tid") int tid){
         try {
+            System.out.println("查看题库");
             Teacher teacherByTeacherId = teacherService.getTeacherByTeacherId(String.valueOf(tid));
             if (teacherByTeacherId != null){
+                System.out.println("看看题");
                 List<question_db> allQuestionById = questionDbService.getAllQuestionBycourseId(teacherByTeacherId.getCourseId());
+                System.out.println("看完了");
                 return Rest.success(allQuestionById);
             }
             else {
+                System.out.println("什么都没有");
                 return Rest.failure(CodeEnum.USER_INFO_ERROR);
             }
         }catch (Exception e){

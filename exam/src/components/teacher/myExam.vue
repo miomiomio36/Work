@@ -1,4 +1,4 @@
-// 我的考试页面组件
+<!-- // 我的考试页面组件 -->
 <template>
 	<div id="myExam">
 		<div class="title">我的考试</div>
