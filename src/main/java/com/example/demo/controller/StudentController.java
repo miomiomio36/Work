@@ -36,6 +36,9 @@ public class StudentController {
     @Autowired
     private ExaService exaService;
 
+    @Autowired
+    private TeacherService teacherService;
+
 
 
     @GetMapping("/test")
@@ -56,15 +59,16 @@ public class StudentController {
             if(scByStudentId.isEmpty()){
                 return Rest.failure("未知错误");
             }
-            List<Exa> exaList = new ArrayList<>();
+            List<Map<String,Object>> exaList = new ArrayList<>();
             for (Sc sc : scByStudentId) {
                 int courseState = sc.getCourseState();
                 if (courseState != 0 && courseState != 1 && courseState != 3){
                     int exaId = sc.getExaId();
                     System.out.println(exaId);
                     Exa exaById = exaService.getExaById(exaId);
+                    Map<String,Object> exaMap = Map.of("id",exaById.getId(),"courseName",exaById.getCourseName(),"exaTime",exaById.getExaTime(),"classroomNumber",exaById.getClassroomNumber(),"teacherName",teacherService.getTeacherByTeacherId(exaById.getTeacherId()).getName(),"exaState",exaById.getExaState());
                     System.out.println(exaById);
-                    exaList.add(exaById);
+                    exaList.add(exaMap);
                 }
             }
             return Rest.success(exaList);
