@@ -50,6 +50,7 @@ public class StudentController {
     @GetMapping("/exam/{sid}")
     public Rest exam(@PathVariable("sid") String id){
         System.out.println("被访问l");
+
         try {
 
             System.out.println("进入try了");
