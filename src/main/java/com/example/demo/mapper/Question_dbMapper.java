@@ -19,6 +19,6 @@ public interface Question_dbMapper {
 
     @Insert("insert into test_db.question_db(question,answer_A,answer_B,answer_C,answer_D,courseId,trueAnswer) "+
             "values(#{question},#{answer_A},#{answer_B},#{answer_C},#{answer_D},#{courseId},#{trueAnswer})")
-    @Options(useGeneratedKeys = true)
+    @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
     int addQuestion(question_db questionDb);
 }

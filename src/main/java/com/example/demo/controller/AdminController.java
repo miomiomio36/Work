@@ -146,6 +146,7 @@ public class AdminController {
                             //根据学生id和课程号更新考试id
                             if (k < stuIdList.size()) {
                                 scService.updateExaId(exa.getId(), courseId, stuIdList.get(k));
+                                System.out.println("分配结果：学生："+stuIdList.get(k)+",考试号："+exa.getId());
                                 scService.updateCourseStateByStudentIdAndexaId(2,stuIdList.get(k),exa.getId());
                                 k++;
                             } else {

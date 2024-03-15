@@ -17,13 +17,7 @@ const routes = [
     path: '/Index',
     name: 'index',
     component: () => import('@/views/ViewIndex.vue'),
-    redirect: '/helloView',
     children: [
-      //欢迎界面:
-      {
-        path: '/helloView',
-        component: () => import('../components/common/HelloNar.vue'),
-      },
       //管理员：
       //安排考试
       {
@@ -56,11 +50,6 @@ const routes = [
       {
         path: '/teacherTiku',
         component: () => import('../components/teacher/teacherTiku.vue'),
-      },
-      // 教师课程模块
-      {
-        path: '/teacherCourse',
-        component: () => import('../components/teacher/teacherCourse.vue'),
       },
       // 学生
       // 学生考试模块：

@@ -1,5 +1,4 @@
-<!-- 学生考试模块 -->
-
+<!-- 缺考页面 -->
 <!-- 此为vue页面模板 -->
 
 <!-- 页面模板： -->
@@ -14,37 +13,50 @@
     <!-- v-loading 为遮罩 -->
 
 
-    <el-table :data="tableData" style="width: 100%" v-loading="loading">
-        <el-table-column prop="courseName" label="课程">
+    <el-table :data="tableData1" style="width: 100%" v-loading="loading">
+        <el-table-column prop="courseId" label="课程号">
+            <template v-slot="scope">
+                <el-tag>{{ scope.row.courseId }}</el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column prop="courseName" label="课程名">
             <template v-slot="scope">
                 <el-tag>{{ scope.row.courseName }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="classroomNumber" label="教室">
+        <el-table-column prop="Type" label="状态">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.classroomNumber }}</el-tag>
+                <el-tag>{{ scope.row.Type }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="exaTime" label="考试时间">
+        <el-table-column prop="number" label="人数">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.exaTime }}</el-tag>
+                <el-tag>{{ scope.row.number }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="teacherId" label="监考老师">
-            <template v-slot="scope">
-                <el-tag>{{ scope.row.teacherId }}</el-tag>
-            </template>
-        </el-table-column>
+    </el-table>
 
-        <!-- 操作： -->
-        <el-table-column label="操作" width="150">
+    <el-table :data="tableData2" style="width: 100%" v-loading="loading">
+        <el-table-column prop="courseId" label="课程号">
             <template v-slot="scope">
-                <el-button @click="clicked(scope.row.id)" type="primary" size="small">
-                    {{ apply }}
-                </el-button>
+                <el-tag>{{ scope.row.courseId }}</el-tag>
             </template>
         </el-table-column>
-
+        <el-table-column prop="courseName" label="课程名">
+            <template v-slot="scope">
+                <el-tag>{{ scope.row.courseName }}</el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column prop="Type" label="状态">
+            <template v-slot="scope">
+                <el-tag>{{ scope.row.Type }}</el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column prop="number" label="人数">
+            <template v-slot="scope">
+                <el-tag>{{ scope.row.number }}</el-tag>
+            </template>
+        </el-table-column>
     </el-table>
 </template>
 
@@ -66,70 +78,40 @@ export default {
     data() {
         return {
             loading: false, //加载标识符
-            tableData: [],   //表数据
-            apply: '参加考试',
+            tableData1: [],   //表1数据
+            tableData2: [],   //表2数据
         }
     },
     //此为默认执行，在这个模板被渲染的时候加载里面的内容
     //意思就是，当你想要一开始就有某个方法执行的时候，你就得把你想的方法放在其中
     created() {
         this.loading = true //数据加载则遮罩表格
-        this.getMethods();
+        this.getDatas();
     },
     //此为方法，就是将所有方法（函数）,放入其中
     methods: {
         // 这是默认的get请求模板，写死了的
-        getMethods() {
+        getDatas() {
             const user = GetUserData();
             const token = localStorage.getItem('token');
-            const Id = user.sid;
+            const Id = user.tid;
             console.log("token:");
             console.log(token);
-            this.$http.ajaxGet(`http://localhost:8888/student/exam/${Id}`, token).then(res => {
+            this.$http.ajaxGet(`http://localhost:8888/admin/statistics`, token).then(res => {
                 let response = JSON.parse(res);
                 console.log(response);
 
                 if (response.code == 200) {
                     this.loading = false;
-                    this.tableData = response.data;
                     this.$message.success(response.message);
-                    
+                    this.tableData1 = response.data[0];
+                    this.tableData2 = response.data[1];
                 }
                 else {
                     this.$message.error(response.message);
                 }
             });
-        },
-        clicked(exaid) {
-            console.log("点了");
-            const token = localStorage.getItem('token');
-            const user = GetUserData();
-            const Id = user.sid;
-            this.$confirm('点击后将进入考试，不可退出, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$http.ajaxGet(`http://localhost:8888/student/attend?sid=${Id}&exaId=${exaid}`, token
-                ).then(res => {
-                    let response = JSON.parse(res);
-                    console.log("点击成功");
-                    console.log(response);
-                    if (response.code == 200) {
-                        this.$message.success(response.message);
-                        console.log("exaId:",exaid);
-                        localStorage.setItem('exaId', JSON.stringify(exaid));
-                        localStorage.setItem('question', JSON.stringify(response.data));
-                        this.$router.push('/Exam');
-                    }
-                    else {
-                        this.$message.error(response.message);
-                    }
-                });
-            }).catch(() => {
-
-            });
-        },
+        }
     },
 
 }

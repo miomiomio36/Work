@@ -1,5 +1,4 @@
-<!-- 学生考试模块 -->
-
+<!-- 教师查看成绩 -->
 <!-- 此为vue页面模板 -->
 
 <!-- 页面模板： -->
@@ -15,36 +14,26 @@
 
 
     <el-table :data="tableData" style="width: 100%" v-loading="loading">
-        <el-table-column prop="courseName" label="课程">
+        <el-table-column prop="classId" label="班级">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.courseName }}</el-tag>
+                <el-tag>{{ scope.row.classId }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="classroomNumber" label="教室">
+        <el-table-column prop="studentId" label="学号">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.classroomNumber }}</el-tag>
+                <el-tag>{{ scope.row.studentId }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="exaTime" label="考试时间">
+        <el-table-column prop="name" label="姓名">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.exaTime }}</el-tag>
+                <el-tag>{{ scope.row.name }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column prop="teacherId" label="监考老师">
+        <el-table-column prop="grade" label="成绩">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.teacherId }}</el-tag>
+                <el-tag>{{ scope.row.grade }}</el-tag>
             </template>
         </el-table-column>
-
-        <!-- 操作： -->
-        <el-table-column label="操作" width="150">
-            <template v-slot="scope">
-                <el-button @click="clicked(scope.row.id)" type="primary" size="small">
-                    {{ apply }}
-                </el-button>
-            </template>
-        </el-table-column>
-
     </el-table>
 </template>
 
@@ -67,7 +56,6 @@ export default {
         return {
             loading: false, //加载标识符
             tableData: [],   //表数据
-            apply: '参加考试',
         }
     },
     //此为默认执行，在这个模板被渲染的时候加载里面的内容
@@ -82,54 +70,22 @@ export default {
         getMethods() {
             const user = GetUserData();
             const token = localStorage.getItem('token');
-            const Id = user.sid;
+            const Id = user.tid;
             console.log("token:");
             console.log(token);
-            this.$http.ajaxGet(`http://localhost:8888/student/exam/${Id}`, token).then(res => {
+            this.$http.ajaxGet(`http://localhost:8888/teacher/find/grade?tid=${Id}`, token).then(res => {
                 let response = JSON.parse(res);
                 console.log(response);
-
+                
                 if (response.code == 200) {
                     this.loading = false;
                     this.tableData = response.data;
                     this.$message.success(response.message);
-                    
-                }
-                else {
+                } else {
                     this.$message.error(response.message);
                 }
             });
-        },
-        clicked(exaid) {
-            console.log("点了");
-            const token = localStorage.getItem('token');
-            const user = GetUserData();
-            const Id = user.sid;
-            this.$confirm('点击后将进入考试，不可退出, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.$http.ajaxGet(`http://localhost:8888/student/attend?sid=${Id}&exaId=${exaid}`, token
-                ).then(res => {
-                    let response = JSON.parse(res);
-                    console.log("点击成功");
-                    console.log(response);
-                    if (response.code == 200) {
-                        this.$message.success(response.message);
-                        console.log("exaId:",exaid);
-                        localStorage.setItem('exaId', JSON.stringify(exaid));
-                        localStorage.setItem('question', JSON.stringify(response.data));
-                        this.$router.push('/Exam');
-                    }
-                    else {
-                        this.$message.error(response.message);
-                    }
-                });
-            }).catch(() => {
-
-            });
-        },
+        }
     },
 
 }

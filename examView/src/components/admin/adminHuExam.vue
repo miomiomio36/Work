@@ -1,4 +1,4 @@
-<!-- 学生成绩模块 -->
+<!-- 缓考页面 -->
 <!-- 此为vue页面模板 -->
 
 <!-- 页面模板： -->
@@ -14,9 +14,14 @@
 
 
     <el-table :data="tableData" style="width: 100%" v-loading="loading">
-        <el-table-column prop="courseName" label="课程">
+        <el-table-column prop="studentId" label="学号">
             <template v-slot="scope">
-                <el-tag>{{ scope.row.courseName }}</el-tag>
+                <el-tag>{{ scope.row.studentId }}</el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column prop="courseId" label="课程号">
+            <template v-slot="scope">
+                <el-tag>{{ scope.row.courseId }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="grade" label="成绩">
@@ -24,27 +29,18 @@
                 <el-tag>{{ scope.row.grade }}</el-tag>
             </template>
         </el-table-column>
-        <el-table-column label="是否及格" width="150">
-            <template v-slot="scope">
-                <el-tag :type="scope.row.grade >= 60 ? 'success' : 'danger'">{{ scope.row.grade >= 60 ? "及格" :
-                    "不及格" }}</el-tag>
-            </template>
-        </el-table-column>
-
         <el-table-column label="操作" width="150">
             <template v-slot="scope">
-                <el-button v-if="scope.row.grade < 60" @click="clicked(scope.row.exaId)"
-                    type="primary" size="small">
+                <el-button v-if="scope.row.grade < 60" @click="clicked(scope.row.studentId,scope.row.exaId,1)" type="primary" size="small">
                     {{ apply }}
                 </el-button>
             </template>
         </el-table-column>
     </el-table>
-
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-            v-model:currentPage="pagination.current" :page-sizes="[10, 20, 40, 80]" v-model:page-size="pagination.size"
-            layout="total, sizes, prev, pager, next, jumper" :total="pagination.total" class="page">
-        </el-pagination>
+        v-model:currentPage="pagination.current" :page-sizes="[10, 20, 40, 80]" v-model:page-size="pagination.size"
+        layout="total, sizes, prev, pager, next, jumper" :total="pagination.total" class="page">
+    </el-pagination>
 </template>
 
 
@@ -71,7 +67,8 @@ export default {
             },
             loading: false, //加载标识符
             tableData: [],   //表数据
-            apply: "申请补考",
+            apply: "通过申请",
+            
         }
     },
     //此为默认执行，在这个模板被渲染的时候加载里面的内容
@@ -80,37 +77,43 @@ export default {
         this.loading = true //数据加载则遮罩表格
         this.getDatas();
         this.pagination.total = this.tableData.length;
+
+
     },
     //此为方法，就是将所有方法（函数）,放入其中
     methods: {
         // 这是默认的get请求模板，写死了的
         getDatas() {
+           
             this.pagination.total = this.tableData.length;
             const user = GetUserData();
             const token = localStorage.getItem('token');
-            const Id = user.sid;
+            const Id = user.tid;
+            
             console.log("token:");
             console.log(token);
-            this.$http.ajaxGet(`http://localhost:8888/student/grade?sid=${Id}`, token).then(res => {
+            this.$http.ajaxGet(`http://localhost:8888/admin/find/deferred`, token).then(res => {
                 let response = JSON.parse(res);
+                // this.$message.info(response.message);
                 console.log(response);
-
                 if (response.code == 200) {
                     this.loading = false;
-                    this.tableData = response.data;
-                    console.log("数据:",this.tableData);
                     this.$message.success(response.message);
+                    this.tableData = response.data;
                     try {
                         this.pagination.total = this.tableData.length;
                     } catch {
-
+                        
                     }
+                        console.log(this.tableData)
                 }
                 else {
                     this.$message.error(response.message);
                 }
             });
         },
+
+        //改变当前记录条数
         //改变当前记录条数
         handleSizeChange(val) {
             this.pagination.size = val;
@@ -121,18 +124,14 @@ export default {
             this.pagination.current = val;
             this.getDatas();
         },
-        clicked(exaId) {
-            const user = GetUserData();
-            const Id = user.sid;
+        clicked(studentId, exaId, pass) {
             const token = localStorage.getItem('token');
-            console.log("Id:", Id);
-            console.log("exaId", exaId);
             this.$confirm('此操作将通过, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$http.ajaxGet(`http://localhost:8888/student/apply?sid=${Id}&exaId=${exaId}`, token).then(res => {
+                this.$http.ajaxGet(`http://localhost:8888/admin/auth/exam?sid=${studentId}&exaId=${exaId}&pass=${pass}`, token).then(res => {
                     let response = JSON.parse(res);
                     // this.$message.info(response.message);
                     console.log(response);
@@ -146,10 +145,10 @@ export default {
                     }
                 });
 
-            }).catch(() => {
+            }).catch(() => { 
 
             });
-        }
+        },
     },
 
 }

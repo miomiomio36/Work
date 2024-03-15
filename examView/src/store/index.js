@@ -32,33 +32,6 @@ export default createStore({
         ],
 
       },
-      {
-        id: "3",
-        title: '课程管理',
-        router: '',
-        icon: 'Setting',
-        SubClass: [
-          {
-            id: "3-1",
-            title: '课程安排',
-            router: '/teacherCourse',
-          },
-        ],
-
-      },
-      {
-        id: "4",
-        title: '题库管理',
-        router: '',
-        icon: 'Document',
-        SubClass: [
-          {
-            id: "4-1",
-            title: '题库',
-            router: '/teacherTiku',
-          },
-        ],
-      },
     ],
     //学生菜单*****************************************************************************
     menu_student: [
@@ -105,7 +78,7 @@ export default createStore({
           },
           {
             id: "1-2",
-            title: '补/缓考申请',
+            title: '查看缓考',
             router: '/adminHuExam',
             // router: '/studentManage',
           },

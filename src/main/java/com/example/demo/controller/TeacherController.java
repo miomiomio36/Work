@@ -183,8 +183,10 @@ public class TeacherController {
     @PostMapping("/import/question")
     public Rest ImportQuestion(@RequestBody question_db question){
         System.out.println(question.toString());
+
         try {
             int i = questionDbService.addQuestion(question);
+
             if (i==1){
                 return Rest.success(CodeEnum.SUCCESS);
             }else {

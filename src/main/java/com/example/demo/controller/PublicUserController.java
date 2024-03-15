@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Service.*;
 import com.example.demo.entity.Admin;
+import com.example.demo.entity.Course;
 import com.example.demo.entity.Students;
 import com.example.demo.entity.Teacher;
 import com.example.demo.enums.CodeEnum;
@@ -34,6 +35,9 @@ public class PublicUserController {
 
     @Autowired
     private ExaService exaService;
+
+    @Autowired
+    private CourseService courseService;
 
     @GetMapping("/test")
     public void test(){
@@ -71,7 +75,12 @@ public class PublicUserController {
 
             String jwt = jwtUtils.createJwt(teacherId, teacher.getRole());
 
-            Map<String,String> map = Map.of("tid",teacherId,"name",name,"jwt",jwt);
+            int courseId = teacher.getCourseId();
+            String courseName =  courseService.getCourseNameById(courseId);
+
+
+            name = name + "("+courseName+")";
+            Map<String,String> map = Map.of("tid",teacherId,"name",name,"jwt",jwt,"courseId", String.valueOf(courseId));
 
             return Rest.success(map);
         }catch (Exception e){

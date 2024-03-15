@@ -85,7 +85,6 @@ export default {
     methods: {
         // 这是默认的get请求模板，写死了的
         getDatas() {
-            this.pagination.total = this.tableData.length;
             const user = GetUserData();
             const token = localStorage.getItem('token');
             const Id = user.sid;
@@ -100,11 +99,6 @@ export default {
                     this.tableData = response.data;
                     console.log("数据:",this.tableData);
                     this.$message.success(response.message);
-                    try {
-                        this.pagination.total = this.tableData.length;
-                    } catch {
-
-                    }
                 }
                 else {
                     this.$message.error(response.message);

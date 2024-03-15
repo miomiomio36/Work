@@ -17,20 +17,15 @@
                 </el-col>
             </el-form-item>
             <el-form-item label="结束时间">
-                <el-col :span="20">
-                    <el-date-picker placeholder="选择日期和时间" v-model="form.exaTime2" type="datetime" format="YYYY年MM月DD日HH:mm"
-                        value-format="YYYY年MM月DD日HH:mm" style="width: 100%;"></el-date-picker>
-                </el-col>
-            </el-form-item>
+                    <el-col :span="20">
+                        <el-date-picker placeholder="选择日期和时间" v-model="form.exaTime2" type="datetime" format="YYYY年MM月DD日HH:mm"
+                            value-format="YYYY年MM月DD日HH:mm" style="width: 100%;"></el-date-picker>
+                    </el-col>
+                </el-form-item>
 
             <el-form-item label="考试状态">
-                <select v-model="form.type">
-                    <option value="正常考试">正常考试</option>
-                    <option value="补考">补考</option>
-                </select>
-                <!-- <el-input v-model="form.type"></el-input> -->
+                <el-input v-model="form.type"></el-input>
             </el-form-item>
-
             <el-form-item>
                 <el-button type="primary" @click="onSubmit()">立即创建</el-button>
                 <el-button @click="cancel()">重置表单</el-button>
@@ -97,25 +92,19 @@ export default {
             const Id = user.tid;
             console.log("token:");
             console.log(token);
-            console.log("表单数据:", this.form)
-            this.$http.ajaxGet(`http://localhost:8888/admin/add/exam?courseId=${this.form.courseId}&exaTime=${this.form.exaTime}&type=${this.form.type}`, token
+            console.log("表单数据:",this.form)
+            this.$http.ajaxGet(`http://localhost:8888/admin/add/exam?courseId=${this.form.courseId}&exaTime=${this.form.exaTime}&type=${this.form.type}`, token,
             ).then(res => {
                 let response = JSON.parse(res);
                 console.log(response);
                 // this.$message.info(response.message);
                 if (response.code == 200) {
                     this.$message.success(response.message);
-                    this.cancel();
                 }
                 else {
                     this.$message.error(response.message);
                 }
             });
-        },
-        cancel() {
-            this.form = {
-
-            };
         },
     },
 
